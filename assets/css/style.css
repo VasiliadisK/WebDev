@@ -9,8 +9,16 @@
 # General
 --------------------------------------------------------------*/
 
-.modal-container{
-  z-index: 1;
+.modal-form{
+  text-align: center;
+}
+
+
+.username-block,.password-block,.btn-block
+{ 
+  width: 100%;
+  margin: auto;
+  padding: 10px;
 }
 
 

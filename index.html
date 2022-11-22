@@ -43,6 +43,9 @@
     </div>
   </div>
 
+
+  
+
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center">
@@ -62,7 +65,7 @@
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
-      <a href="#appointment" class="appointment-btn scrollto"><span class="d-none d-md-inline">Login</span></a>
+      <a href="#appointment" class="appointment-btn scrollto" data-bs-toggle="modal" data-bs-target="#modal"><span class="d-none d-md-inline" >Login</span></a>
 
     </div>
   </header><!-- End Header -->
@@ -78,9 +81,38 @@
   </section><!-- End Hero -->
 
   <main id="main">
-
     
-  
+    <!-- Modal -->
+
+  <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="ModalLabel">Login</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form class="modal-form">
+            <div class="username-block" style="margin-bottom:30px;">
+              <label for="username">Username</label>
+              <input type="input" class="username" id="username" placeholder="Username">
+            </div>
+            <div class="password-block">
+              <label for="password">Password</label>
+              <input type="password" class="password" id="password" placeholder="Password">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   
+
+
     <!-- ======= Why Us Section ======= -->
     <section id="why-us" class="why-us">
       <div class="container">
