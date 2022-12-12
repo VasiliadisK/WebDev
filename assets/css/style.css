@@ -9,6 +9,17 @@
 # General
 --------------------------------------------------------------*/
 
+.modcont {
+  /* Center horizontally*/
+  text-align: center;
+}
+.modal-form {
+  font-family: arial;
+  font-size: 30px;
+  margin: 25px;
+}
+
+
 .modal-form{
   text-align: center;
 }

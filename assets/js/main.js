@@ -220,3 +220,37 @@
   new PureCounter();
 
 })()
+
+
+docarray = [
+  {
+    'Name': "Tsifsa ropt",
+    'Specialty': "Kardiologos",
+    "location": "Thessaloniki"
+  },
+  {
+    'Name': "Makis Kenteris",
+    'Specialty': "Gynaikologos",
+    "location": "Athina"
+  },
+  {
+    'Name': "Dafni",
+    'Specialty': "peologos",
+    "location": "Patra"
+  },
+  {
+    'Name': "Tsifsa",
+    'Specialty': "Kardiologos",
+    "location": "Karditsa"
+  }
+]
+document.getElementById("anythingSearch").addEventListener("keyup",function(){
+  let text = document.getElementById("anythingSearch").value;
+
+  filterarray= docarray.filter(function(a){
+    if (a.Name.includes(text)){
+      return a.Name;
+    }
+  })
+  
+})
