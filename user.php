@@ -1,3 +1,15 @@
+<?php
+include('db.php');
+
+# Το query τραβάει τα απαραίτητα δεδομένα για το view για τον χρήστη 'kostas'.
+# Να αλλάξω where clause (Όταν μπουν τα sessions).
+
+$query = "SELECT doctors.firstname, doctors.lastname, doctors.specialty, users.name, appointments.location, DATE_FORMAT(appointments.datetime, '%W %m/%d/%Y at %H:%i') AS datetime, appointments.description FROM appointments INNER JOIN users ON appointments.user_id = users.id INNER JOIN doctors ON appointments.doctor_id = doctors.id WHERE users.name = 'kostas'";
+$prepared = $conn->prepare($query);
+$prepared->execute();
+$result = $prepared->get_result();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -243,38 +255,49 @@
 
 
     <!-- Αν δεν υπάρχουν ραντεβού να βγάζει το μήνυμα -->
+
     <section id="services">
-
-        <div class="container">
-          <h1 class="text-center" >My appointments</h1>
-          <h2 class ="text-center" style="display: none;">There are no appointments at this time</h2>
+      <div class="container">
+        <h1 class="text-center" >My appointments</h1>
           <div class="row row-cols-1 row-cols-md-3 g-4 mt-5">
-            
-            <div class="col">
-                <div class="card">
-                  <img src="/assets/img/gianakis.jpeg" class="card-img-top"
-                    alt="Palm Springs Road" />
-                  <div class="card-body">
-                    <h5 class="card-title">Giannakis apto dafni</h5>
-                    <p class="card-text">
-                      <p class="card-text">
-                          Gynaikologos,
-                        </p>
-                        <p class="card-text">
-                          Τετάρτη στις 9:00
-                        </p><p class="card-text">
-                          Ετήσια Εξέταση Pap
-                        </p><p class="card-text">
-                          <button type="button" class="btn btn-primary btn-lg btn-block">Edit Appointment</button>                        </p>
-                    </p>
-                  </div>
-                </div>
-              </div>
+    <?php
+      if ($result->num_rows > 0) {
+        $sn=1;
+        while($data = $result->fetch_assoc()) {
+    ?>
+      <div class="col">
+          <div class="card">
+            <img src="/assets/img/gianakis.jpeg" class="card-img-top"
+              alt="Palm Springs Road" />
+            <div class="card-body">
+              <h5 class="card-title"><?php echo $data['firstname'], " ", $data['lastname'] ?></h5>
+              <p class="card-text">
+                <p class="card-text">
+                    <?php echo $data['specialty'] ?>
+                  </p>
+                  <p class="card-text">
+                    <?php echo $data['datetime']; ?>
+                  </p>
+                  <p class="card-text">
+                    <?php echo $data['description'] ?>
+                  </p>
+                  <p class="card-text">
+                    <button type="button" class="btn btn-primary btn-lg btn-block">Edit Appointment</button>
+                  </p>
+                </p>
+            </div>
+          </div>
         </div>
+    <?php
+    $sn++;}
+  } else { 
+    ?><p class="card-text">
+        <h2 class="text-center">There are no appointments at this time</h2>
+      </p>    
+    <?php } ?>
+          </div>
+      </div>
     </section>
-
-
-
     <!-- End of my appointments section-->
     
     <!-- ======= Contact Section ======= -->
