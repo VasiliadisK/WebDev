@@ -1,3 +1,8 @@
+<?php
+include('db.php');
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -91,29 +96,60 @@
           <h1 class="modal-title fs-5" id="ModalLabel">Profile Options</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+
+
         <div class="modal-body" >
-          <form class="modal-form">
+          <form method = "POST" class="modal-form">
             <div class="firstname-block modcont">
               <label for="firstname">Name</label>
-              <input type="input" class="firstname" id="firstname" placeholder="firstname" value="Onoma ">
+              <input type="input" class="firstname" id="firstname" placeholder="firstname" name = "firstname">
             </div>
             <div class="lastname-block modcont">
               <label for="lastname">Last Name</label>
-              <input type="input" class="lastname" id="lastname" placeholder="lastname" value="Epwnymo">
+              <input type="input" class="lastname" id="lastname" placeholder="lastname" name = "lastname">
             </div>
             <div class="specialty-block modcont">
               <label for="specialty">Specialty</label>
-              <input type="input" class="specialty" id="specialty" placeholder="specialty" value="Eidikothta">
+              <input type="input" class="specialty" id="specialty" placeholder="specialty" name = "specialty">
             </div>
             <div class="bio-block modcont">
               <label for="bio">Biography</label>
-              <textarea id="form7" class="md-textarea form-control" rows="3"></textarea>
+              <textarea id="form7" class="md-textarea form-control" rows="3" name = "biography"></textarea>
             </div>
-          </form>
         </div>
+
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Save Changes</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
         </div>
+        </form>
+
+        <!-- get data from the form -->
+        <?php
+              $sql = "SELECT firstname, lastname, specialty, biography FROM doctors";
+              $result = $conn->query($sql);
+              if ($result->num_rows > 0){
+              $row = $result->fetch_assoc();
+
+              $firstname = $row['firstname'];
+              $lastname = $row['lastname'];
+              $specialty = $row['specialty'];
+              $biography = $row['biography'];
+              }
+            // $firstname = $_POST['firstname'];
+            // $lastname = $_POST['lastname'];
+            // $specialty = $_POST['specialty'];
+            // $biography = $_POST['biography'];
+            if($firstname != $_POST['firstname']){
+            $sql = "UPDATE doctors SET firstname='".$_POST['firstname']."', lastname = '".$_POST['lastname']."', specialty = '".$_POST['specialty']."', biography = '".$_POST['biography']."' WHERE firstname='".$firstname."'";
+            $result = $conn->query($sql);
+            }
+            // echo $firstname . '<br>';
+            // echo $lastname . '<br>';
+            // echo $specialty . '<br>';
+            // echo $biography . '<br>';
+            ?>
+
+
       </div>
     </div>
   </div>
