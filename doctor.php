@@ -125,28 +125,29 @@ include('db.php');
 
         <!-- get data from the form -->
         <?php
-              $sql = "SELECT firstname, lastname, specialty, biography FROM doctors";
-              $result = $conn->query($sql);
-              if ($result->num_rows > 0){
-              $row = $result->fetch_assoc();
+              // $sql = "SELECT firstname, lastname, specialty, biography FROM doctors";
+              // $result = $conn->query($sql);
+              // if ($result->num_rows > 0){
+              // $row = $result->fetch_assoc();
 
-              $firstname = $row['firstname'];
-              $lastname = $row['lastname'];
-              $specialty = $row['specialty'];
-              $biography = $row['biography'];
-              }
-            // $firstname = $_POST['firstname'];
-            // $lastname = $_POST['lastname'];
-            // $specialty = $_POST['specialty'];
-            // $biography = $_POST['biography'];
-            if($firstname != $_POST['firstname']){
-            $sql = "UPDATE doctors SET firstname='".$_POST['firstname']."', lastname = '".$_POST['lastname']."', specialty = '".$_POST['specialty']."', biography = '".$_POST['biography']."' WHERE firstname='".$firstname."'";
+              // $firstname = $row['firstname'];
+              // $lastname = $row['lastname'];
+              // $specialty = $row['specialty'];
+              // $biography = $row['biography'];
+              // }
+            if($_SERVER["REQUEST_METHOD"] == "POST"){
+            $sql = "UPDATE doctors SET firstname='".test_input($_POST['firstname'])."', lastname = '".test_input($_POST['lastname'])."', specialty = '".test_input($_POST['specialty'])."', biography = '".test_input($_POST['biography'])."' WHERE firstname='".test_input($firstname)."'";
             $result = $conn->query($sql);
+          }
+
+
+            function test_input($data) {
+              $data = trim($data);
+              $data = stripslashes($data);
+              $data = htmlspecialchars($data);
+              return $data;
             }
-            // echo $firstname . '<br>';
-            // echo $lastname . '<br>';
-            // echo $specialty . '<br>';
-            // echo $biography . '<br>';
+
             ?>
 
 
