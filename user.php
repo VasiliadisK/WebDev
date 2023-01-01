@@ -4,10 +4,15 @@ include('db.php');
 # Το query τραβάει τα απαραίτητα δεδομένα για το view για τον χρήστη 'kostas'.
 # Να αλλάξω where clause (Όταν μπουν τα sessions).
 
-$query = "SELECT doctors.firstname, doctors.lastname, doctors.specialty, users.name, appointments.location, DATE_FORMAT(appointments.datetime, '%W %m/%d/%Y at %H:%i') AS datetime, appointments.description FROM appointments INNER JOIN users ON appointments.user_id = users.id INNER JOIN doctors ON appointments.doctor_id = doctors.id WHERE users.name = 'kostas'";
+$query = "SELECT doctors.firstname, doctors.lastname, doctors.specialty, doctors.image, users.name, appointments.location, DATE_FORMAT(appointments.datetime, '%W %m/%d/%Y at %H:%i') AS datetime, appointments.description FROM appointments INNER JOIN users ON appointments.user_id = users.id INNER JOIN doctors ON appointments.doctor_id = doctors.id WHERE users.name = 'kostas'";
 $prepared = $conn->prepare($query);
 $prepared->execute();
-$result = $prepared->get_result();
+$appointments_result = $prepared->get_result();
+
+$query = "SELECT doctors.firstname, doctors.lastname, doctors.specialty, doctors.image, doctors.email, doctors.phone_number FROM doctors";
+$prepared = $conn->prepare($query);
+$prepared->execute();
+$doctors_result = $prepared->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -66,12 +71,15 @@ $result = $prepared->get_result();
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto active" href="#home">home</a></li>
+          <li><a class="nav-link scrollto active" href="#home">Home</a></li>
           <li><a class="nav-link scrollto" href="#docs">Doctors</a></li>
           <li><a class="nav-link scrollto" href="#services">My appointments</a></li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
           <li><div class="container">
-            <input class="form-control" id="anythingSearch" type="text" placeholder="Search for our doctors">
+          <form action="#">
+            <input class="form-control" id="search" type="text" placeholder="Search for our doctors">
+            <button style="display:none;" type="submit">Submit</button>
+          </form>
           </div></li>
         </ul>
         
@@ -129,19 +137,19 @@ $result = $prepared->get_result();
 
           <div class="icon-box">
             <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
-            <h4 class="title"><a href="">Search for our doctors</a></h4>
+            <h4 class="title"><a href="#search">Search for our doctors</a></h4>
             <p class="description">Feel free to use the search bar to look up any of our doctors using filters like name, specialty or location !</p>
           </div>
 
           <div class="icon-box">
             <div class="icon"><i class="fa-solid fa-check"></i></div>
-            <h4 class="title"><a href="">Make an appointment with a doctor of your choice...</a></h4>
+            <h4 class="title"><a class="nav-link scrollto" href="#docs">Make an appointment with a doctor of your choice...</a></h4>
             <p class="description">Found a doctor you like? Make an appointment with him to resolve your issues</p>
           </div>
 
           <div class="icon-box">
             <div class="icon"><i class="fa-solid fa-phone"></i></div>
-            <h4 class="title"><a href="">Contact</a></h4>
+            <h4 class="title"><a class="nav-link scrollto" href="#contact">Contact</a></h4>
             <p class="description">Be sure to let us know if there is a problem or if you need help with your appointments!</p>
           </div>
 
@@ -154,25 +162,31 @@ $result = $prepared->get_result();
  
    <!-- Search for doctors section -->
    
-   <section  id="docs">
+   <section id="docs">
      <div class="container">
         <h1 class="text-center">Our doctors</h1>
         <div class="row row-cols-1 row-cols-md-3 g-4 mt-5">
-            
+        <?php
+          if ($doctors_result->num_rows > 0) {
+            $sn=1;
+            while($data = $doctors_result->fetch_assoc()) {
+        ?>
             <div class="col">
                 <div class="card">
-                  <img src="/assets/img/gianakis.jpeg" class="card-img-top"
+                  <img src="./assets/img/<?php echo $data['image']; ?>" class="card-img-top"
                     alt="Palm Springs Road" />
                   <div class="card-body">
-                    <h5 class="card-title">Giannakis apto dafni</h5>
+                    <h5 class="card-title">
+                      <?php echo $data['firstname'], " ", $data['lastname'] ?> 
+                    </h5>
                     <p class="card-text">
                       <p class="card-text">
-                          Gynaikologos,
+                          <?php echo $data['specialty'] ?>
                         </p>
                         <p class="card-text">
-                          abdoul@gmail.com,
+                          <?php echo $data['email'] ?>
                         </p><p class="card-text">
-                          696969696
+                          <?php echo $data['phone_number'] ?>
                         </p><p class="card-text">
                           <button type="button" class="btn btn-primary btn-lg btn-block">Make appointment</button>                        </p>
 
@@ -181,76 +195,17 @@ $result = $prepared->get_result();
                   </div>
                 </div>
               </div>
-            <div class="col">
-              <div class="card">
-                <img src="/assets/img/gianakis.jpeg" class="card-img-top"
-                  alt="Palm Springs Road" />
-                <div class="card-body">
-                  <h5 class="card-title">Tsifsa ropt</h5>
-                  <p class="card-text">
-                    <p class="card-text">
-                        peologos,
-                      </p>
-                      <p class="card-text">
-                        tsifsa@gmail.com,
-                      </p><p class="card-text">
-                        696969696
-                      </p><p class="card-text">
-                        <button type="button" class="btn btn-primary btn-lg btn-block">Make appointment</button>                        </p>
-
-                      </p>
-                  </p>
+          <?php
+          $sn++;}
+        } else { 
+          ?>
+          <p class="card-text">
+            <h2 class="text-center">There are no available doctors at this time</h2>
+          </p>    
+          <?php } ?>
                 </div>
-              </div>
             </div>
-            <div class="col">
-                <div class="card">
-                  <img src="/assets/img/gianakis.jpeg" class="card-img-top"
-                    alt="Palm Springs Road" />
-                  <div class="card-body">
-                    <h5 class="card-title">Makis Kenteris</h5>
-                    <p class="card-text">
-                      <p class="card-text">
-                          athliatros,
-                        </p>
-                        <p class="card-text">
-                          OKENTERIS@gmail.com,
-                        </p><p class="card-text">
-                          696969696
-                        </p><p class="card-text">
-                          <button type="button" class="btn btn-primary btn-lg btn-block">Make appointment</button>                        </p>
-
-                        </p>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="card">
-                  <img src="/assets/img/gianakis.jpeg" class="card-img-top"
-                    alt="Palm Springs Road" />
-                  <div class="card-body">
-                    <h5 class="card-title">Tsifsa ropt</h5>
-                    <p class="card-text">
-                      <p class="card-text">
-                          peologos,
-                        </p>
-                        <p class="card-text">
-                          tsifsa@gmail.com,
-                        </p><p class="card-text">
-                          696969696
-                        </p><p class="card-text">
-                          <button type="button" class="btn btn-primary btn-lg btn-block">Make appointment</button>                        </p>
-
-                        </p>
-                    </p>
-                  </div>
-                </div>
-              </div>
-          </div>
-    
-     </div>
-   </section>
+          </section>
    
    <!-- End of doctors sections -->
     <!-- My appointments section -->
@@ -263,13 +218,13 @@ $result = $prepared->get_result();
         <h1 class="text-center" >My appointments</h1>
           <div class="row row-cols-1 row-cols-md-3 g-4 mt-5">
     <?php
-      if ($result->num_rows > 0) {
+      if ($appointments_result->num_rows > 0) {
         $sn=1;
-        while($data = $result->fetch_assoc()) {
+        while($data = $appointments_result->fetch_assoc()) {
     ?>
       <div class="col">
           <div class="card">
-            <img src="/assets/img/gianakis.jpeg" class="card-img-top"
+            <img src="./assets/img/<?php echo $data['image']; ?>" class="card-img-top"
               alt="Palm Springs Road" />
             <div class="card-body">
               <h5 class="card-title"><?php echo $data['firstname'], " ", $data['lastname'] ?></h5>

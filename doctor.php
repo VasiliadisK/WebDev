@@ -1,7 +1,15 @@
 <?php
 include('db.php');
-?>
 
+# Το query τραβάει τα απαραίτητα δεδομένα για το view για τον γιατρό 'kostas'.
+# Να αλλάξω where clause (Όταν μπουν τα sessions).
+
+$query = "SELECT users.firstname, users.lastname, users.email, users.phone_number, appointments.location, DATE_FORMAT(appointments.datetime, '%W %m/%d/%Y at %H:%i') AS datetime, appointments.description FROM appointments INNER JOIN users ON appointments.user_id = users.id INNER JOIN doctors ON appointments.doctor_id = doctors.id WHERE doctors.username = 'nikos'";
+$prepared = $conn->prepare($query);
+$prepared->execute();
+$appointments_result = $prepared->get_result();
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +39,6 @@ include('db.php');
 </head>
 
 <body>
-  
   <!-- ======= Top Bar ======= -->
   <div id="topbar" class="d-flex align-items-center fixed-top">
     <div class="container d-flex justify-content-between">
@@ -96,8 +103,6 @@ include('db.php');
           <h1 class="modal-title fs-5" id="ModalLabel">Profile Options</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-
-
         <div class="modal-body" >
           <form action = "doctor.php" method = "POST" class="modal-form">
             <div class="firstname-block modcont">
@@ -210,6 +215,7 @@ include('db.php');
             ?>
 
 
+
       </div>
     </div>
   </div>
@@ -228,159 +234,56 @@ include('db.php');
               <h2>Doctor Appointments</h2>
               <p>Here you see a list of doctor appointments</p>
             </div>
-            <div class="d-flex justify-content-around flex-wrap">
-              
+
+            <div class="d-flex justify-content-around flex-wrap p-4">
+            <?php
+              if ($appointments_result->num_rows > 0) {
+              $sn=1;
+              while($data = $appointments_result->fetch_assoc()) {
+            ?> 
               <div class="card" style="width: 18rem;">
                 <img class="card-img-top" src="patient.png" alt="Card image cap">
                 <div class="card-body text-center" >
-                  <h5 class="card-title">Appointment 1</h5>
+                  <h5 class="card-title">
+                    <?php echo $data['firstname'], " ", $data['lastname']; ?>
+                  </h5>
+
                   <p class="card-text"><!--Grid column-->
                     <div class="text-center">
                         <ul class="list-unstyled mb-0">
                             <li><i class="fas fa-phone mt-4 fa-2x"></i>
-                                <p>+ 01 234 567 89</p>
+                                <p>
+                                  <?php echo $data['phone_number']; ?>
+                                </p>
                             </li>
             
                             <li><i class="fas fa-envelope mt-4 fa-2x"></i>
-                                <p>contact@mdbootstrap.com</p>
+                                <p>
+                                  <?php echo $data['email']; ?>
+                                </p>
                             </li>
                         </ul>
-                    </div>
+                      </div>
+
                     <!--Grid column--></p>
                   <a href="#" class="btn btn-primary">Edit Appointment</a>
                 </div>
               </div>
 
-              <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="patient.png" alt="Card image cap">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Appointment 1</h5>
-                  <p class="card-text"><!--Grid column-->
-                    <div class="text-center">
-                        <ul class="list-unstyled mb-0">
-                            <li><i class="fas fa-phone mt-4 fa-2x"></i>
-                                <p>+ 01 234 567 89</p>
-                            </li>
-            
-                            <li><i class="fas fa-envelope mt-4 fa-2x"></i>
-                                <p>contact@mdbootstrap.com</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <!--Grid column--></p>
-                  <a href="#" class="btn btn-primary">Edit Appointment</a>
-                </div>
-              </div>
-
-              <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="patient.png" alt="Card image cap">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Appointment 1</h5>
-                  <p class="card-text"><!--Grid column-->
-                    <div class="text-center">
-                        <ul class="list-unstyled mb-0">
-                            <li><i class="fas fa-phone mt-4 fa-2x"></i>
-                                <p>+ 01 234 567 89</p>
-                            </li>
-            
-                            <li><i class="fas fa-envelope mt-4 fa-2x"></i>
-                                <p>contact@mdbootstrap.com</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <!--Grid column--></p>
-                  <a href="#" class="btn btn-primary">Edit Appointment</a>
-                </div>
-              </div>
-
-              <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="patient.png" alt="Card image cap">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Appointment 1</h5>
-                  <p class="card-text"><!--Grid column-->
-                    <div class="text-center">
-                        <ul class="list-unstyled mb-0">
-                            <li><i class="fas fa-phone mt-4 fa-2x"></i>
-                                <p>+ 01 234 567 89</p>
-                            </li>
-            
-                            <li><i class="fas fa-envelope mt-4 fa-2x"></i>
-                                <p>contact@mdbootstrap.com</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <!--Grid column--></p>
-                  <a href="#" class="btn btn-primary">Edit Appointment</a>
-                </div>
-              </div>
-            
-              <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="patient.png" alt="Card image cap">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Appointment 1</h5>
-                  <p class="card-text"><!--Grid column-->
-                    <div class="text-center">
-                        <ul class="list-unstyled mb-0">
-                            <li><i class="fas fa-phone mt-4 fa-2x"></i>
-                                <p>+ 01 234 567 89</p>
-                            </li>
-            
-                            <li><i class="fas fa-envelope mt-4 fa-2x"></i>
-                                <p>contact@mdbootstrap.com</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <!--Grid column--></p>
-                  <a href="#" class="btn btn-primary">Edit Appointment</a>
-                </div>
-              </div>
-
-              <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="patient.png" alt="Card image cap">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Appointment 1</h5>
-                  <p class="card-text"><!--Grid column-->
-                    <div class="text-center">
-                        <ul class="list-unstyled mb-0">
-                            <li><i class="fas fa-phone mt-4 fa-2x"></i>
-                                <p>+ 01 234 567 89</p>
-                            </li>
-            
-                            <li><i class="fas fa-envelope mt-4 fa-2x"></i>
-                                <p>contact@mdbootstrap.com</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <!--Grid column--></p>
-                  <a href="#" class="btn btn-primary">Edit Appointment</a>
-                </div>
-              </div>
-
-              <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="patient.png" alt="Card image cap">
-                <div class="card-body text-center">
-                  <h5 class="card-title">Appointment 1</h5>
-                  <p class="card-text"><!--Grid column-->
-                    <div class="text-center">
-                        <ul class="list-unstyled mb-0">
-                            <li><i class="fas fa-phone mt-4 fa-2x"></i>
-                                <p>+ 01 234 567 89</p>
-                            </li>
-            
-                            <li><i class="fas fa-envelope mt-4 fa-2x"></i>
-                                <p>contact@mdbootstrap.com</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <!--Grid column--></p>
-                  <a href="#" class="btn btn-primary">Edit Appointment</a>
-                </div>
-              </div>
+            <?php
+            $sn++;}
+          } else { 
+            ?> 
+            <p class="card-text">
+              <h2 class="text-center p-5">There are no appointments at this time</h2>
+            </p>    
+            <?php } ?>     
             </div>
-          </div>
         </div>
-      </div>
-    </section><!-- End Doctor Appointment Section -->
+    </section>
+    
+    <!-- End Doctor Appointment Section -->
+
 
     <!-- ======= Contact Section ======= -->
     <section id="contact" class="contact">
