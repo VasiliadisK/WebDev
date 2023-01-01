@@ -31,7 +31,7 @@ include('db.php');
 </head>
 
 <body>
-
+  
   <!-- ======= Top Bar ======= -->
   <div id="topbar" class="d-flex align-items-center fixed-top">
     <div class="container d-flex justify-content-between">
@@ -99,7 +99,7 @@ include('db.php');
 
 
         <div class="modal-body" >
-          <form method = "POST" class="modal-form">
+          <form action = "doctor.php" method = "POST" class="modal-form">
             <div class="firstname-block modcont">
               <label for="firstname">Name</label>
               <input type="input" class="firstname" id="firstname" placeholder="firstname" name = "firstname">
@@ -136,10 +136,69 @@ include('db.php');
               // $biography = $row['biography'];
               // }
             if($_SERVER["REQUEST_METHOD"] == "POST"){
-            $sql = "UPDATE doctors SET firstname='".test_input($_POST['firstname'])."', lastname = '".test_input($_POST['lastname'])."', specialty = '".test_input($_POST['specialty'])."', biography = '".test_input($_POST['biography'])."' WHERE firstname='".test_input($firstname)."'";
-            $result = $conn->query($sql);
+              $firstname = $_POST['firstname'];
+              $lastname = $_POST['lastname'];
+              $specialty = $_POST['specialty'];
+              $biography = $_POST['biography'];
+            $mySql = profileDataChangeQuery($firstname,$lastname,$specialty,$biography);
+            echo $firstname;
+            if(!empty($mySql))
+            $result = $conn->query($mySql);
           }
 
+          //put this in a function and make it return
+
+          function profileDataChangeQuery($firstname,$lastname,$specialty,$biography){
+            $n = 0;
+            $coma = true;
+            $query = "UPDATE doctors SET ";
+            if(!empty(test_input($firstname))){
+              $n++;
+              $query = $query . "firstname='" . $firstname . "'";
+              $coma = false;
+            }
+
+            if(!empty(test_input($lastname))){
+              $n++;
+              if($coma==true){
+              $query = $query . "lastname='" . $lastname . "'";
+              $coma = false;
+              }
+              else{
+              $query = $query . ", lastname='" . $lastname . "'";
+              }
+            }
+
+            if(!empty(test_input($specialty))){
+              $n++;
+              if($coma==true){
+              $query = $query . "specialty='" . $specialty . "'";
+              $coma = false;
+              }
+              else{
+              $query = $query . ", specialty='" . $specialty . "'";
+              }
+            }
+
+            if(!empty(test_input($biography))){
+              $n++;
+              if($coma==true){
+              $query = $query . "biography='" . $biography . "'";
+              $coma = false;
+              }
+              else{
+              $query = $query . ", biography='" . $biography . "'";
+              }
+            }
+
+            if($n!=0){
+              $query = $query . " WHERE id=1";
+              return $query;
+            }
+            else {
+              return $query = "";
+            }
+            }
 
             function test_input($data) {
               $data = trim($data);
@@ -390,6 +449,7 @@ include('db.php');
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
 
 </body>
 
