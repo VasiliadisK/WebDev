@@ -4,7 +4,7 @@ include('db.php');
 # Το query τραβάει τα απαραίτητα δεδομένα για το view για τον χρήστη 'kostas'.
 # Να αλλάξω where clause (Όταν μπουν τα sessions).
 
-$query = "SELECT doctors.firstname, doctors.lastname, doctors.specialty, doctors.image, users.name, appointments.location, DATE_FORMAT(appointments.datetime, '%W %m/%d/%Y at %H:%i') AS datetime, appointments.description FROM appointments INNER JOIN users ON appointments.user_id = users.id INNER JOIN doctors ON appointments.doctor_id = doctors.id WHERE users.name = 'kostas'";
+$query = "SELECT doctors.firstname, doctors.lastname, doctors.specialty, doctors.image, appointments.location, DATE_FORMAT(appointments.datetime, '%W %m/%d/%Y at %H:%i') AS datetime, appointments.description FROM appointments INNER JOIN patients ON appointments.patient_id = patients.id INNER JOIN doctors ON appointments.doctor_id = doctors.id WHERE patients.username = 'kostas'";
 $prepared = $conn->prepare($query);
 $prepared->execute();
 $appointments_result = $prepared->get_result();
