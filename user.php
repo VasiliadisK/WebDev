@@ -103,7 +103,7 @@ $doctors_result = $prepared->get_result();
 
 
         <div class="modal-body" >
-          <form action = "doctor.php" method = "POST" class="modal-form">
+          <form method = "POST" class="modal-form">
             <div class="firstname-block modcont">
               <label for="firstname">First Name</label>
               <input type="input" class="firstname" id="firstname" name="firstname">
