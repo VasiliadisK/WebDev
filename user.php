@@ -98,22 +98,24 @@ $doctors_result = $prepared->get_result();
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="ModalLabel">Profile Options</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"> </button>
         </div>
+
+
         <div class="modal-body" >
-          <form class="modal-form">
+          <form action = "doctor.php" method = "POST" class="modal-form">
             <div class="firstname-block modcont">
               <label for="firstname">First Name</label>
-              <input type="input" class="firstname" id="firstname" placeholder="firstname" value="Konstantinos Aggelos ">
+              <input type="input" class="firstname" id="firstname" name="firstname">
             </div>
             <div class="lastname-block modcont">
               <label for="lastname">Last Name</label>
-              <input type="input" class="lastname" id="lastname" placeholder="lastname" value="Vasileiadhs">
+              <input type="input" class="lastname" id="lastname" name ="lastname">
             </div>
 
             <div class="lastname-block modcont">
                 <label for="username">Username</label>
-                <input type="input" class="username" id="username" placeholder="Username" value="username στη βαση">
+                <input type="input" class="username" id="username" name ="username">
               </div>
             
             

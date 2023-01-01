@@ -39,7 +39,6 @@ $appointments_result = $prepared->get_result();
 </head>
 
 <body>
-
   <!-- ======= Top Bar ======= -->
   <div id="topbar" class="d-flex align-items-center fixed-top">
     <div class="container d-flex justify-content-between">
@@ -105,28 +104,118 @@ $appointments_result = $prepared->get_result();
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body" >
-          <form class="modal-form">
+          <form action = "doctor.php" method = "POST" class="modal-form">
             <div class="firstname-block modcont">
               <label for="firstname">Name</label>
-              <input type="input" class="firstname" id="firstname" placeholder="firstname" value="Onoma ">
+              <input type="input" class="firstname" id="firstname" placeholder="firstname" name = "firstname">
             </div>
             <div class="lastname-block modcont">
               <label for="lastname">Last Name</label>
-              <input type="input" class="lastname" id="lastname" placeholder="lastname" value="Epwnymo">
+              <input type="input" class="lastname" id="lastname" placeholder="lastname" name = "lastname">
             </div>
             <div class="specialty-block modcont">
               <label for="specialty">Specialty</label>
-              <input type="input" class="specialty" id="specialty" placeholder="specialty" value="Eidikothta">
+              <input type="input" class="specialty" id="specialty" placeholder="specialty" name = "specialty">
             </div>
             <div class="bio-block modcont">
               <label for="bio">Biography</label>
-              <textarea id="form7" class="md-textarea form-control" rows="3"></textarea>
+              <textarea id="form7" class="md-textarea form-control" rows="3" name = "biography"></textarea>
             </div>
-          </form>
         </div>
+
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Save Changes</button>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
         </div>
+        </form>
+
+        <!-- get data from the form -->
+        <?php
+              // $sql = "SELECT firstname, lastname, specialty, biography FROM doctors";
+              // $result = $conn->query($sql);
+              // if ($result->num_rows > 0){
+              // $row = $result->fetch_assoc();
+
+              // $firstname = $row['firstname'];
+              // $lastname = $row['lastname'];
+              // $specialty = $row['specialty'];
+              // $biography = $row['biography'];
+              // }
+            if($_SERVER["REQUEST_METHOD"] == "POST"){
+              $firstname = $_POST['firstname'];
+              $lastname = $_POST['lastname'];
+              $specialty = $_POST['specialty'];
+              $biography = $_POST['biography'];
+            $mySql = profileDataChangeQuery($firstname,$lastname,$specialty,$biography);
+            echo $firstname;
+            if(!empty($mySql))
+            $result = $conn->query($mySql);
+          }
+
+          //put this in a function and make it return
+
+          function profileDataChangeQuery($firstname,$lastname,$specialty,$biography){
+            $n = 0;
+            $coma = true;
+            $query = "UPDATE doctors SET ";
+            if(!empty(test_input($firstname))){
+              $n++;
+              $query = $query . "firstname='" . $firstname . "'";
+              $coma = false;
+            }
+
+            if(!empty(test_input($lastname))){
+              $n++;
+              if($coma==true){
+              $query = $query . "lastname='" . $lastname . "'";
+              $coma = false;
+              }
+              else{
+              $query = $query . ", lastname='" . $lastname . "'";
+              }
+            }
+
+            if(!empty(test_input($specialty))){
+              $n++;
+              if($coma==true){
+              $query = $query . "specialty='" . $specialty . "'";
+              $coma = false;
+              }
+              else{
+              $query = $query . ", specialty='" . $specialty . "'";
+              }
+            }
+
+            if(!empty(test_input($biography))){
+              $n++;
+              if($coma==true){
+              $query = $query . "biography='" . $biography . "'";
+              $coma = false;
+              }
+              else{
+              $query = $query . ", biography='" . $biography . "'";
+              }
+            }
+
+            if($n!=0){
+              $query = $query . " WHERE id=1";
+              return $query;
+            }
+            else {
+              return $query = "";
+            }
+            }
+
+            function test_input($data) {
+              $data = trim($data);
+              $data = stripslashes($data);
+              $data = htmlspecialchars($data);
+              return $data;
+            }
+
+            ?>
+
+
+
       </div>
     </div>
   </div>
@@ -145,6 +234,7 @@ $appointments_result = $prepared->get_result();
               <h2>Doctor Appointments</h2>
               <p>Here you see a list of doctor appointments</p>
             </div>
+
             <div class="d-flex justify-content-around flex-wrap p-4">
             <?php
               if ($appointments_result->num_rows > 0) {
@@ -157,6 +247,7 @@ $appointments_result = $prepared->get_result();
                   <h5 class="card-title">
                     <?php echo $data['firstname'], " ", $data['lastname']; ?>
                   </h5>
+
                   <p class="card-text"><!--Grid column-->
                     <div class="text-center">
                         <ul class="list-unstyled mb-0">
@@ -173,10 +264,12 @@ $appointments_result = $prepared->get_result();
                             </li>
                         </ul>
                       </div>
+
                     <!--Grid column--></p>
                   <a href="#" class="btn btn-primary">Edit Appointment</a>
                 </div>
               </div>
+
             <?php
             $sn++;}
           } else { 
@@ -190,6 +283,7 @@ $appointments_result = $prepared->get_result();
     </section>
     
     <!-- End Doctor Appointment Section -->
+
 
     <!-- ======= Contact Section ======= -->
     <section id="contact" class="contact">
@@ -258,6 +352,7 @@ $appointments_result = $prepared->get_result();
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
 
 </body>
 
