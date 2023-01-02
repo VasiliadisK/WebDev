@@ -65,8 +65,8 @@
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
 
-      <a href="#appointment" class="appointment-btn scrollto" data-bs-toggle="modal" data-bs-target="#login_modal"><span class="d-none d-md-inline" >Login</span></a>
-      <a href="#appointment" class="appointment-btn scrollto" data-bs-toggle="modal" data-bs-target="#register_modal"><span class="d-none d-md-inline" >Register</span></a>
+      <a href="#appointment" class="appointment-btn scrollto" data-bs-toggle="modal" data-bs-target="#login_modal" id="getstarted"><span class="d-none d-md-inline" >Get Started</span></a>
+      <!-- <a href="#appointment" class="appointment-btn scrollto" data-bs-toggle="modal" data-bs-target="#register_modal"><span class="d-none d-md-inline" >Register</span></a> -->
     </div>
   </header><!-- End Header -->
 
@@ -86,25 +86,43 @@
 
   <div class="modal fade" id="login_modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">
+      <div class="modal-content" id="login">
+      <div class="switch">
+            <div class="login active" onclick="LoginBut()">Login</div>
+            <div class="register" onclick="RegisterBut()">Register</div>
+        </div>
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="ModalLabel">Login</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        
         <div class="modal-body">
           <form class="modal-form">
+            
             <div class="username-block" style="margin-bottom:30px;">
-              <label for="username">Username</label>
+            
+              <label for="username" id="label1">Username</label>
               <input type="input" class="username" id="username" placeholder="Username">
             </div>
             <div class="password-block">
               <label for="password">Password</label>
               <input type="password" class="password" id="password" placeholder="Password">
             </div>
+            <div class="registerfields" style="display: none;">
+              <div class="email-block" style="margin-bottom:30px;">
+                <label for="email">Email</label>
+                <input type="input" class="email" id="email" placeholder="Email">
+              </div>
+              <div class="bio-block">
+                <label for="specialty">Specialty</label>
+                <input type="bio" class="bio" id="bio" placeholder="Specialty">
+              </div>
+            </div>
           </form>
+
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="submit" class="btn btn-primary formbut">Login</button>
         </div>
       </div>
     </div>

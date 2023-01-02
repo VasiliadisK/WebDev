@@ -9,6 +9,86 @@
 # General
 --------------------------------------------------------------*/
 
+.switch{
+  position: absolute;
+  right: 30px;
+  top:70px;
+  display: flex;
+  border-bottom: 1px solid #1977cc;
+  cursor: pointer;
+  z-index: 1000;
+}
+.switch::after{
+  content: '';
+  height: 6px;
+  width: 60px;
+  background:#1977cc;
+  border-radius: 60px 60px 0px 0px;
+  position: absolute;
+  bottom: 0;
+  left: 8px;
+  transition: .3s ease;
+}
+
+.login
+{
+  padding: 5px 12px;
+  margin-bottom: 10px;
+  border-radius: 50px;
+  text-align: right;
+  margin-left: 4px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition:.3s ease-in-out;
+  
+
+}
+
+.register{
+  padding: 5px 12px;
+  margin-bottom: 10px;
+  border-radius: 50px;
+  text-align: right;
+  margin-left: 4px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition:.3s ease-in-out;
+}
+
+.register.active{
+
+  color: white;
+  background: linear-gradient(45deg,#00d5fc,#046af6);
+}
+.switch.active{
+  border-bottom: 1px solid #1977cc;
+
+}
+.switch.active::after{
+  left: 90px;
+  width: 70px;
+  background: #1977cc;
+}
+
+.login.active{
+
+  color: white;
+  background: linear-gradient(45deg,#00d5fc,#046af6);
+}
+
+.modal-content {
+  width: 100%;
+  margin-top: 40px;
+  text-align: center;
+  position: relative;
+
+}
+
+#register
+{
+  display: none;
+}
+
 .modcont {
   /* Center horizontally*/
   text-align: center;

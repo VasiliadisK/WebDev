@@ -218,13 +218,44 @@ docarray = [
     "location": "Karditsa"
   }
 ]
-document.getElementById("anythingSearch").addEventListener("keyup",function(){
-  let text = document.getElementById("anythingSearch").value;
+// document.getElementById("anythingSearch").addEventListener("keyup",function(){
+//   let text = document.getElementById("anythingSearch").value;
 
-  filterarray= docarray.filter(function(a){
-    if (a.Name.includes(text)){
-      return a.Name;
-    }
-  })
+//   filterarray= docarray.filter(function(a){
+//     if (a.Name.includes(text)){
+//       return a.Name;
+//     }
+//   })
   
-})
+// })
+
+const login = document.getElementById("login");
+const change = document.querySelector(".switch");
+const loginbutton = document.querySelector(".login");
+const registerbutton = document.querySelector(".register");
+const label = document.getElementById("ModalLabel");
+const info = document.querySelector(".registerfields");
+const submitbut = document.querySelector(".formbut");
+
+function LoginBut(){
+  loginbutton.classList.toggle("active");
+  registerbutton.classList.remove("active");
+  change.classList.remove("active");
+  label.innerHTML="Login";
+  info.style.display="none";
+  submitbut.innerHTML = "Login";
+  
+}
+
+
+function RegisterBut(){
+  registerbutton.classList.toggle("active");
+  change.classList.toggle("active");
+  loginbutton.classList.remove("active");
+  label.innerHTML="Register";
+  info.style.display="block";
+  submitbut.innerHTML = "Register";
+
+
+}
+
