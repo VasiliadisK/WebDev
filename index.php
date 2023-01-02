@@ -98,9 +98,7 @@
         
         <div class="modal-body">
           <form class="modal-form">
-            
-            <div class="username-block" style="margin-bottom:30px;">
-            
+            <div class="username-block" style="margin-bottom:0px;">
               <label for="username" id="label1">Username</label>
               <input type="input" class="username" id="username" placeholder="Username">
             </div>
@@ -109,13 +107,22 @@
               <input type="password" class="password" id="password" placeholder="Password">
             </div>
             <div class="registerfields" style="display: none;">
-              <div class="email-block" style="margin-bottom:30px;">
+            <div class="password-block" >
+              <label for="password">Confirm Password</label>
+              <input type="password" class="password" id="confirmPassword" placeholder="Confirm Password">
+            </div>
+              <div class="email-block" style="margin-bottom:0px; padding:10px;">
                 <label for="email">Email</label>
                 <input type="input" class="email" id="email" placeholder="Email">
               </div>
               <div class="bio-block">
-                <label for="specialty">Specialty</label>
-                <input type="bio" class="bio" id="bio" placeholder="Specialty">
+                <label for="specialty" id ="specialty">Specialty</label>
+                <input type="bio" class="bio" id="specialtyInput" placeholder="Specialty" disabled>
+              </div>
+              <div class="form-check" style = "padding-top:30px;">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style = "cursor:pointer;">
+                <label class="form-check-label" for="flexCheckDefault" style="margin-right:100px; cursor:pointer;">Register as a doctor
+                </label>
               </div>
             </div>
           </form>
