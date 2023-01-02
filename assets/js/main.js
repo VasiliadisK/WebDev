@@ -236,6 +236,8 @@ const registerbutton = document.querySelector(".register");
 const label = document.getElementById("ModalLabel");
 const info = document.querySelector(".registerfields");
 const submitbut = document.querySelector(".formbut");
+const docRegCheckbox = document.querySelector('#flexCheckDefault');
+const specialty = document.querySelector('#specialtyInput');
 
 function LoginBut(){
   loginbutton.classList.toggle("active");
@@ -258,4 +260,12 @@ function RegisterBut(){
 
 
 }
+
+docRegCheckbox.addEventListener('click', function() {
+  if (this.checked) {
+      specialty.disabled = false;
+  } else {
+    specialty.disabled = true;
+  }
+});
 
