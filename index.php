@@ -23,6 +23,12 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
+  <!-- Latest compiled and minified CSS -->
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
 </head>
 
 <body>
@@ -83,7 +89,7 @@
   <main id="main">
     
     <!-- Login Modal -->
-
+  
   <div class="modal fade" id="login_modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content" id="login">
@@ -97,84 +103,49 @@
         </div>
         
         <div class="modal-body">
-          <form class="modal-form">
+          <form id="login_register_form" method="POST" class="modal-form">
             <div class="username-block" style="margin-bottom:0px;">
               <label for="username" id="label1">Username</label>
-              <input type="input" class="username" id="username" placeholder="Username">
+              <input type="input" class="form-control" name="username" id="username" placeholder="Username" required>
+              <span class="error" id="username_err"></span>
             </div>
             <div class="password-block">
               <label for="password">Password</label>
-              <input type="password" class="password" id="password" placeholder="Password">
+              <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+              <span class="error" id="password_err"></span>
             </div>
             <div class="registerfields" style="display: none;">
             <div class="password-block" >
               <label for="password">Confirm Password</label>
-              <input type="password" class="password" id="confirmPassword" placeholder="Confirm Password">
+              <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+              <span class="error" id="confirm_password_err"></span>
             </div>
               <div class="email-block" style="margin-bottom:0px; padding:10px;">
                 <label for="email">Email</label>
-                <input type="input" class="email" id="email" placeholder="Email">
+                <input type="input" class="form-control" name="email" id="email" placeholder="Email" required>
+                <span class="error" id="email_err"></span>
               </div>
               <div class="bio-block">
                 <label for="specialty" id ="specialty">Specialty</label>
-                <input type="bio" class="bio" id="specialtyInput" placeholder="Specialty" disabled>
+                <input type="bio" class="form-control" name="specialty" id="specialtyInput" placeholder="Specialty" disabled required>
+                <span class="error" id="specialty_err"></span>
               </div>
               <div class="form-check" style = "padding-top:30px;">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style = "cursor:pointer;">
+                <input class="form-check-input" type="checkbox" name="is_doctor" value="" id="flexCheckDefault" style = "cursor:pointer;">
                 <label class="form-check-label" for="flexCheckDefault" style="margin-right:100px; cursor:pointer;">Register as a doctor
                 </label>
               </div>
             </div>
+            <div class="modal-footer">
+              <button style="display:block;" type="button" name="button" id="login_button" value="login" class="btn btn-primary formbut">Login</button>
+              <button style="display:none;" type="button" name="button" id="register_button" value="login" class="btn btn-primary formbut">Register</button>
+            </div>
           </form>
 
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary formbut">Login</button>
         </div>
       </div>
     </div>
   </div>
-
-
-    <!-- Register Modal -->
-
-  <div class="modal fade" id="register_modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="ModalLabel">Register</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form class="modal-form">
-            <div class="username-block" style="margin-bottom:30px;">
-              <label for="username">Username</label>
-              <input type="input" class="username" id="username" placeholder="Username">
-            </div>
-            <div class="password-block">
-              <label for="password">Password</label>
-              <input type="password" class="password" id="password" placeholder="Password">
-            </div>
-            <div class="email-block" style="margin-bottom:30px;">
-              <label for="email">Email</label>
-              <input type="input" class="email" id="email" placeholder="Email">
-            </div>
-            <div class="bio-block">
-              <label for="specialty">Specialty</label>
-              <input type="bio" class="bio" id="bio" placeholder="Specialty">
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Register</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-   
-
 
     <!-- ======= Why Us Section ======= -->
     <section id="why-us" class="why-us">
@@ -389,6 +360,7 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/validation.js"></script>
 
 </body>
 
