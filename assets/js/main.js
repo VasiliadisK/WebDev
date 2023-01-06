@@ -235,9 +235,11 @@ const loginbutton = document.querySelector(".login");
 const registerbutton = document.querySelector(".register");
 const label = document.getElementById("ModalLabel");
 const info = document.querySelector(".registerfields");
-const submitbut = document.querySelector(".formbut");
+const login_submit_but = document.getElementById("login_button");
+const register_submit_but = document.getElementById("register_button");
 const docRegCheckbox = document.querySelector('#flexCheckDefault');
 const specialty = document.querySelector('#specialtyInput');
+const form = document.getElementById("login_register_form");
 
 function LoginBut(){
   loginbutton.classList.toggle("active");
@@ -245,8 +247,8 @@ function LoginBut(){
   change.classList.remove("active");
   label.innerHTML="Login";
   info.style.display="none";
-  submitbut.innerHTML = "Login";
-  
+  register_submit_but.style.display="none";
+  login_submit_but.style.display="block";
 }
 
 
@@ -256,9 +258,8 @@ function RegisterBut(){
   loginbutton.classList.remove("active");
   label.innerHTML="Register";
   info.style.display="block";
-  submitbut.innerHTML = "Register";
-
-
+  login_submit_but.style.display="none";
+  register_submit_but.style.display="block";
 }
 
 docRegCheckbox.addEventListener('click', function() {
