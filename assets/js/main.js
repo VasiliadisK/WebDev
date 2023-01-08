@@ -240,6 +240,7 @@ const register_submit_but = document.getElementById("register_button");
 const docRegCheckbox = document.querySelector('#flexCheckDefault');
 const specialty = document.querySelector('#specialtyInput');
 const form = document.getElementById("login_register_form");
+const login_as_doctor = document.getElementById("login_as_doctor");
 
 function LoginBut(){
   loginbutton.classList.toggle("active");
@@ -249,6 +250,7 @@ function LoginBut(){
   info.style.display="none";
   register_submit_but.style.display="none";
   login_submit_but.style.display="block";
+  login_as_doctor.style.display="block";
 }
 
 
@@ -260,6 +262,7 @@ function RegisterBut(){
   info.style.display="block";
   login_submit_but.style.display="none";
   register_submit_but.style.display="block";
+  login_as_doctor.style.display="none";
 }
 
 docRegCheckbox.addEventListener('click', function() {

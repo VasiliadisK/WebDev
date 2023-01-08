@@ -1,3 +1,16 @@
+<?php session_start(); 
+
+if(isset($_SESSION["loggedin"])){
+  if($_SESSION["is_doctor"]){
+    header("Location: doctor.php");
+  } else {
+    header("Location: user.php");
+  }
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -56,13 +69,13 @@
   <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center">
 
-      <h1 class="logo me-auto"><a href="index.html">DocWebox</a></h1>
+      <h1 class="logo me-auto"><a href="index.php">DocWebox</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto active" href="User.html">Home</a></li> <!--#hero-->
+          <li><a class="nav-link scrollto active" href="index.php">Home</a></li> <!--#hero-->
           <li><a class="nav-link scrollto" href="#docs">Doctors</a></li>
           <li><a class="nav-link scrollto" href="#services">Services</a></li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
@@ -70,8 +83,13 @@
         
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
-
+      <?php 
+      if(!isset($_SESSION["loggedin"])){
+        ?>
       <a href="#appointment" class="appointment-btn scrollto" data-bs-toggle="modal" data-bs-target="#login_modal" id="getstarted"><span class="d-none d-md-inline" >Get Started</span></a>
+      <?php } else { ?>
+      <a class="appointment-btn d-none d-md-inline" href="logout.php">Logout</a>
+      <?php } ?>
       <!-- <a href="#appointment" class="appointment-btn scrollto" data-bs-toggle="modal" data-bs-target="#register_modal"><span class="d-none d-md-inline" >Register</span></a> -->
     </div>
   </header><!-- End Header -->
@@ -113,13 +131,18 @@
               <label for="password">Password</label>
               <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
               <span class="error" id="password_err"></span>
+            </div>     
+            <div class="form-check" id="login_as_doctor" style = "padding-top:30px;">
+              <input class="form-check-input" type="checkbox" name="login_as_doctor" value="" id="flexCheckDefault" style = "cursor:pointer;">
+              <label class="form-check-label" for="flexCheckDefault" style="margin-right:100px; cursor:pointer;">Login as a doctor
+              </label>
             </div>
             <div class="registerfields" style="display: none;">
-            <div class="password-block" >
-              <label for="password">Confirm Password</label>
-              <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
-              <span class="error" id="confirm_password_err"></span>
-            </div>
+              <div class="password-block" >
+                <label for="password">Confirm Password</label>
+                <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required>
+                <span class="error" id="confirm_password_err"></span>
+              </div>
               <div class="email-block" style="margin-bottom:0px; padding:10px;">
                 <label for="email">Email</label>
                 <input type="input" class="form-control" name="email" id="email" placeholder="Email" required>
@@ -130,8 +153,8 @@
                 <input type="bio" class="form-control" name="specialty" id="specialtyInput" placeholder="Specialty" disabled required>
                 <span class="error" id="specialty_err"></span>
               </div>
-              <div class="form-check" style = "padding-top:30px;">
-                <input class="form-check-input" type="checkbox" name="is_doctor" value="" id="flexCheckDefault" style = "cursor:pointer;">
+              <div class="form-check" id="register_as_doctor" style = "padding-top:30px;">
+                <input class="form-check-input" type="checkbox" name="register_as_doctor" value="" id="flexCheckDefault" style = "cursor:pointer;">
                 <label class="form-check-label" for="flexCheckDefault" style="margin-right:100px; cursor:pointer;">Register as a doctor
                 </label>
               </div>
@@ -141,7 +164,7 @@
               <button style="display:none;" type="button" name="button" id="register_button" value="login" class="btn btn-primary formbut">Register</button>
             </div>
           </form>
-
+          <div id="message"></div>
         </div>
       </div>
     </div>

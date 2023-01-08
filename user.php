@@ -1,10 +1,11 @@
 <?php
 include('db.php');
+session_start();
 
 # Το query τραβάει τα απαραίτητα δεδομένα για το view για τον χρήστη 'kostas'.
 # Να αλλάξω where clause (Όταν μπουν τα sessions).
 
-$query = "SELECT doctors.firstname, doctors.lastname, doctors.specialty, doctors.image, appointments.location, DATE_FORMAT(appointments.datetime, '%W %m/%d/%Y at %H:%i') AS datetime, appointments.description FROM appointments INNER JOIN patients ON appointments.patient_id = patients.id INNER JOIN doctors ON appointments.doctor_id = doctors.id WHERE patients.username = 'kostas'";
+$query = "SELECT doctors.firstname, doctors.lastname, doctors.specialty, doctors.image, appointments.location, DATE_FORMAT(appointments.datetime, '%W %m/%d/%Y at %H:%i') AS datetime, appointments.description FROM appointments INNER JOIN patients ON appointments.patient_id = patients.id INNER JOIN doctors ON appointments.doctor_id = doctors.id WHERE patients.username = '".$_SESSION['name']."'";
 $prepared = $conn->prepare($query);
 $prepared->execute();
 $appointments_result = $prepared->get_result();
@@ -65,13 +66,13 @@ $doctors_result = $prepared->get_result();
   <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center">
 
-      <h1 class="logo me-auto"><a href="index.html">DocWebox</a></h1>
+      <h1 class="logo me-auto"><a href="index.php">DocWebox</a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html" class="logo me-auto"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto active" href="#home">Home</a></li>
+          <li><a class="nav-link scrollto active" href="index.php">Home</a></li>
           <li><a class="nav-link scrollto" href="#docs">Doctors</a></li>
           <li><a class="nav-link scrollto" href="#services">My appointments</a></li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
@@ -82,12 +83,12 @@ $doctors_result = $prepared->get_result();
           </form>
           </div></li>
         </ul>
-        
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
-
+      <a class="appointment-btn d-none d-md-inline mx-2" href="logout.php">Logout</a>
       <a href="#profilesettings" class="profilesettings-btn scrollto" data-bs-toggle="modal" data-bs-target="#modal"><span class="d-none d-md-inline" ><div class="icon"><i class="fa-solid fa-gear"></i></div></span></a>
     </div>
+    <div id="message"></div>
   </header><!-- End Header -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 

@@ -40,7 +40,7 @@ $(document).ready(function () {
                 processData: false,
                 contentType: false,
                 cache: false,
-                async: false,
+                async: true,
                 beforeSend: function () {
                     $('#register_button').html('<i class="fa-solid fa-spinner fa-spin"></i>');
                     $('#register_button').attr("disabled", true);
@@ -48,15 +48,69 @@ $(document).ready(function () {
                 },
 
                 success: function (data) {
-                    $('#message').html(data);
+                    console.log(data);
+                    var json = $.parseJSON(data);
+                    $('#message').html(json.message);
+                    if(json.success){
+                        // Redirect to index page
+                        window.location.href = "./index.php"; 
+                    }
                 },
                 complete: function () {
                     setTimeout(function () {
                         $('#login_register_form').trigger("reset");
-                        $('#register_button').html('Submit');
+                        $('#register_button').html('Register');
                         $('#register_button').attr("disabled", false);
                         $('#register_button').css({ "border-radius": "4px" });
-                    }, 50000);
+                    }, 5000);
+                }
+            });
+        }
+    });
+
+    $('#login_button').click(function () {
+
+        if (!checkuser() && !checkpass()) {
+            console.log("er1");
+            $("#message").html(`<div class="alert alert-warning">Please fill all required field</div>`);
+        } else if (!checkuser() || !checkpass()) {
+            $("#message").html(`<div class="alert alert-warning">Please fill all required field</div>`);
+            console.log("er");
+        }
+        else {
+            console.log("ok");
+            $("#message").html("");
+            var form = $('#login_register_form')[0];
+            var data = new FormData(form);
+            $.ajax({
+                type: "POST",
+                url: "login.php",
+                data: data,
+                processData: false,
+                contentType: false,
+                cache: false,
+                async: true,
+                beforeSend: function () {
+                    $('#login_button').html('<i class="fa-solid fa-spinner fa-spin"></i>');
+                    $('#login_button').attr("disabled", true);
+                    $('#login_button').css({ "border-radius": "50%" });
+                },
+
+                success: function (data) {
+                    var json = $.parseJSON(data);
+                    $('#message').html(json.message);
+                    if(json.success){
+                        // Redirect to index page
+                        window.location.href = "./index.php"; 
+                    }  
+                },
+                complete: function () {
+                    setTimeout(function () {
+                        $('#login_register_form').trigger("reset");
+                        $('#login_button').html('Login');
+                        $('#login_button').attr("disabled", false);
+                        $('#login_button').css({ "border-radius": "4px" });
+                    }, 5000);
                 }
             });
         }
