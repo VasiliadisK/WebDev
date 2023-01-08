@@ -17,7 +17,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         $username_err = "Username can only contain letters, numbers, and underscores.";
     } else{
         // Prepare a select statement
-        if(isset($_POST["is_doctor"])){
+        if(isset($_POST["register_as_doctor"])){
             $sql = "SELECT id FROM doctors WHERE username = ?";
         } else{
             $sql = "SELECT id FROM patients WHERE username = ?";
@@ -37,12 +37,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 mysqli_stmt_store_result($stmt);
                 
                 if(mysqli_stmt_num_rows($stmt) == 1){
+                    $response = [ 
+                        'success' => false,
+                        'message' => '<div class="alert alert-danger">This username is already taken.</div>'
+                        ];
+                     echo json_encode($response);
                     $username_err = "This username is already taken.";
                 } else{
                     $username = trim($_POST["username"]);
                 }
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                $response = [ 
+                    'success' => false,
+                    'message' => '<div class="alert alert-warning">Oops! Something went wrong. Please try again later.</div>'
+                    ];
+                 echo json_encode($response);
             }
 
             // Close statement
@@ -81,7 +90,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
 
     // Validate specialty
-    if(isset($_POST["is_doctor"])){
+    if(isset($_POST["register_as_doctor"])){
         if(empty(trim($_POST["specialty"]))){
             $specialty_err = "Enter a specialty.";
         } elseif(!preg_match('/^[a-zA-Z]+$/', trim($_POST["specialty"]))) {
@@ -93,7 +102,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     
     
     // Check input errors before inserting in database
-    if(!isset($_POST["is_doctor"])){
+    if(!isset($_POST["register_as_doctor"])){
         if(empty($username_err) && empty($password_err) && empty($confirm_password_err) && empty($email_err)){
         
             // Prepare an insert statement
@@ -110,11 +119,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 
                 // Attempt to execute the prepared statement
                 if(mysqli_stmt_execute($stmt)){
-                    // Redirect to login page
-                    header("location: index.php");
-                    echo "Successfully registered!";
+                    $response = [ 
+                        'success' => true,
+                        'message' => '<div class="alert alert-success">Successfully registered!</div>'
+                        ];
+                     echo json_encode($response);
                 } else{
-                    echo "Oops! Something went wrong. Please try again later.";
+                    $response = [ 
+                        'success' => false,
+                        'message' => '<div class="alert alert-warning">Oops! Something went wrong. Please try again later.</div>'
+                        ];
+                     echo json_encode($response);
                 }
     
                 // Close statement
@@ -139,11 +154,17 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 
                 // Attempt to execute the prepared statement
                 if(mysqli_stmt_execute($stmt)){
-                    // Redirect to login page
-                    header("location: index.php");
-                    echo "Successfully registered!";
+                    $response = [ 
+                        'success' => true,
+                        'message' => '<div class="alert alert-success">Successfully registered!</div>'
+                        ];
+                     echo json_encode($response);
                 } else{
-                    echo "Oops! Something went wrong. Please try again later.";
+                    $response = [ 
+                        'success' => false,
+                        'message' => '<div class="alert alert-warning">Oops! Something went wrong. Please try again later.</div>'
+                        ];
+                     echo json_encode($response);
                 }
     
                 // Close statement
