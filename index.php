@@ -132,9 +132,9 @@ if(isset($_SESSION["loggedin"])){
               <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
               <span class="error" id="password_err"></span>
             </div>     
-            <div class="form-check" id="login_as_doctor" style = "padding-top:30px;">
-              <input class="form-check-input" type="checkbox" name="login_as_doctor" value="" id="flexCheckDefault" style = "cursor:pointer;">
-              <label class="form-check-label" for="flexCheckDefault" style="margin-right:100px; cursor:pointer;">Login as a doctor
+            <div class="form-check" id = "login_as_doctor" style = "padding-top:30px;">
+              <input class="form-check-input" type="checkbox" value="" name="login_as_doctor" id="login_as_doctor" style = "cursor:pointer;">
+              <label class="form-check-label" for="login_as_doctor" style="margin-right:100px; cursor:pointer;">Login as a doctor
               </label>
             </div>
             <div class="registerfields" style="display: none;">
@@ -153,9 +153,9 @@ if(isset($_SESSION["loggedin"])){
                 <input type="bio" class="form-control" name="specialty" id="specialtyInput" placeholder="Specialty" disabled required>
                 <span class="error" id="specialty_err"></span>
               </div>
-              <div class="form-check" id="register_as_doctor" style = "padding-top:30px;">
-                <input class="form-check-input" type="checkbox" name="register_as_doctor" value="" id="flexCheckDefault" style = "cursor:pointer;">
-                <label class="form-check-label" for="flexCheckDefault" style="margin-right:100px; cursor:pointer;">Register as a doctor
+              <div class="form-check" style = "padding-top:30px;">
+                <input class="form-check-input" type="checkbox" name="register_as_doctor" value="" id="register_as_doctor" style = "cursor:pointer;">
+                <label class="form-check-label" for="register_as_doctor" style="margin-right:100px; cursor:pointer;">Register as a doctor
                 </label>
               </div>
             </div>
