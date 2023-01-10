@@ -93,7 +93,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(isset($_POST["register_as_doctor"])){
         if(empty(trim($_POST["specialty"]))){
             $specialty_err = "Enter a specialty.";
-        } elseif(!preg_match('/^[a-zA-Z]+$/', trim($_POST["specialty"]))) {
+        } elseif(!preg_match('/^[a-zA-Z\s]+$/', trim($_POST["specialty"]))) {
             $specialty_err = "Specialty can only contain letters.";
         } else {
             $specialty = trim($_POST["specialty"]);

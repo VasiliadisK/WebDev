@@ -71,14 +71,12 @@ $appointments_result = $prepared->get_result();
           <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
           <li><a class="nav-link scrollto" href="#doctorappointment">Doctor Appointment</a></li>
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-          <a href="#profilesettings" class="profilesettings-btn scrollto" data-bs-toggle="modal" data-bs-target="#modal"><span class="d-none d-md-inline" ><div class="icon"><i class="fa-solid fa-gear"></i></div></span></a>
-
         </ul>
         
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
-
-
+      <a class="appointment-btn d-none d-md-inline mx-2" href="logout.php">Logout</a>
+      <a href="#profilesettings" class="profilesettings-btn scrollto" data-bs-toggle="modal" data-bs-target="#modal"><span class="d-none d-md-inline" ><div class="icon"><i class="fa-solid fa-gear"></i></div></span></a>
     </div>
   </header><!-- End Header -->
 
