@@ -1,7 +1,9 @@
 <?php
-include('db.php');
 session_start();
-
+if(!isset($_SESSION['loggedin'])) {
+  header("Location:index.php");
+}
+include('db.php');
 # Το query τραβάει τα απαραίτητα δεδομένα για το view για τον χρήστη 'kostas'.
 # Να αλλάξω where clause (Όταν μπουν τα sessions).
 
@@ -121,7 +123,7 @@ $lastname = $row['lastname'];
             </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary" id ="enterKey">Save changes</button>
         </div>
         </form>
       </div>

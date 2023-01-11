@@ -1,6 +1,9 @@
 <?php
-include('db.php');
 session_start();
+if(!isset($_SESSION['loggedin'])) {
+  header("Location:index.php");
+}
+include('db.php');
 # Το query τραβάει τα απαραίτητα δεδομένα για το view για τον γιατρό 'kostas'.
 # Να αλλάξω where clause (Όταν μπουν τα sessions).
 
