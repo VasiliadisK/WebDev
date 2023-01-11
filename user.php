@@ -14,6 +14,12 @@ $query = "SELECT doctors.firstname, doctors.lastname, doctors.specialty, doctors
 $prepared = $conn->prepare($query);
 $prepared->execute();
 $doctors_result = $prepared->get_result();
+
+$sql = "SELECT firstname, lastname, username FROM patients WHERE id =" .$_SESSION['id'];
+$result = $conn->query($sql);
+$row = $result->fetch_assoc();
+$firstname = $row['firstname'];
+$lastname = $row['lastname'];
 ?>
 
 <!DOCTYPE html>
@@ -104,30 +110,70 @@ $doctors_result = $prepared->get_result();
 
 
         <div class="modal-body" >
-          <form method = "POST" class="modal-form">
+          <form action = "user.php" method = "POST" class="modal-form">
             <div class="firstname-block modcont">
               <label for="firstname">First Name</label>
-              <input type="input" class="firstname" id="firstname" name="firstname">
+              <input type="input" class="firstname" id="firstname" name="firstname" placeholder = "<?php echo $firstname ?>">
             </div>
             <div class="lastname-block modcont">
               <label for="lastname">Last Name</label>
-              <input type="input" class="lastname" id="lastname" name ="lastname">
+              <input type="input" class="lastname" id="lastname" name ="lastname" placeholder = "<?php echo $lastname ?>">
             </div>
-
-            <div class="lastname-block modcont">
-                <label for="username">Username</label>
-                <input type="input" class="username" id="username" name ="username">
-              </div>
-            
-            
-          </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
+        </form>
       </div>
     </div>
   </div>
+  <?php
+   if($_SERVER["REQUEST_METHOD"] == "POST"){
+   $firstname = $_POST['firstname'];
+   $lastname = $_POST['lastname'];
+   $mySql = profileDataChangeQuery($firstname,$lastname);
+   if(!empty($mySql))
+            $result = $conn->query($mySql);
+          }
+
+          function profileDataChangeQuery($firstname,$lastname){
+            $n = 0;
+            $coma = true;
+            $query = "UPDATE patients SET ";
+            if(!empty(test_input($firstname))){
+              $n++;
+              $query = $query . "firstname='" . $firstname . "'";
+              $coma = false;
+            }
+
+            if(!empty(test_input($lastname))){
+              $n++;
+              if($coma===true){
+              $query = $query . "lastname='" . $lastname . "'";
+              $coma = false;
+              }
+              else
+              $query = $query . ", lastname='" . $lastname . "'";
+              
+            }
+
+            if($coma===false){
+              $query = $query . " WHERE id = " .$_SESSION['id'];
+              return $query;
+            }
+            else {
+              return $query = "";
+            }
+            }
+
+            function test_input($data) {
+              $data = trim($data);
+              $data = stripslashes($data);
+              $data = htmlspecialchars($data);
+              return $data;
+            }
+
+            ?>
  <!-- ======= About Section ======= -->
 
  <section id="home" class="about mt-5">

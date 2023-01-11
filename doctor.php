@@ -1,6 +1,6 @@
 <?php
 include('db.php');
-
+session_start();
 # Το query τραβάει τα απαραίτητα δεδομένα για το view για τον γιατρό 'kostas'.
 # Να αλλάξω where clause (Όταν μπουν τα sessions).
 
@@ -8,6 +8,14 @@ $query = "SELECT patients.firstname, patients.lastname, patients.email, patients
 $prepared = $conn->prepare($query);
 $prepared->execute();
 $appointments_result = $prepared->get_result();
+
+$sql = "SELECT firstname, lastname, specialty, biography FROM doctors WHERE id =" .$_SESSION['id'];
+$result = $conn->query($sql);
+$row = $result->fetch_assoc();
+$firstname = $row['firstname'];
+$lastname = $row['lastname'];
+$specialty = $row['specialty'];
+$biography = $row['biography'];
 
 ?>
 
@@ -105,19 +113,19 @@ $appointments_result = $prepared->get_result();
           <form action = "doctor.php" method = "POST" class="modal-form">
             <div class="firstname-block modcont">
               <label for="firstname">Name</label>
-              <input type="input" class="firstname" id="firstname" placeholder="firstname" name = "firstname">
+              <input type="input" class="firstname" id="firstname" placeholder="<?php echo $firstname ?>" name = "firstname">
             </div>
             <div class="lastname-block modcont">
               <label for="lastname">Last Name</label>
-              <input type="input" class="lastname" id="lastname" placeholder="lastname" name = "lastname">
+              <input type="input" class="lastname" id="lastname" placeholder="<?php echo $lastname ?>" name = "lastname">
             </div>
             <div class="specialty-block modcont">
               <label for="specialty">Specialty</label>
-              <input type="input" class="specialty" id="specialty" placeholder="specialty" name = "specialty">
+              <input type="input" class="specialty" id="specialty" placeholder="<?php echo $specialty ?>" name = "specialty">
             </div>
             <div class="bio-block modcont">
               <label for="bio">Biography</label>
-              <textarea id="form7" class="md-textarea form-control" rows="3" name = "biography"></textarea>
+              <textarea id="form7" class="md-textarea form-control" rows="3" placeholder = "<?php echo $biography ?>" name = "biography"></textarea>
             </div>
         </div>
 
@@ -128,28 +136,16 @@ $appointments_result = $prepared->get_result();
 
         <!-- get data from the form -->
         <?php
-              // $sql = "SELECT firstname, lastname, specialty, biography FROM doctors";
-              // $result = $conn->query($sql);
-              // if ($result->num_rows > 0){
-              // $row = $result->fetch_assoc();
-
-              // $firstname = $row['firstname'];
-              // $lastname = $row['lastname'];
-              // $specialty = $row['specialty'];
-              // $biography = $row['biography'];
-              // }
             if($_SERVER["REQUEST_METHOD"] == "POST"){
               $firstname = $_POST['firstname'];
               $lastname = $_POST['lastname'];
               $specialty = $_POST['specialty'];
               $biography = $_POST['biography'];
             $mySql = profileDataChangeQuery($firstname,$lastname,$specialty,$biography);
-            echo $firstname;
-            if(!empty($mySql))
+            if(!empty($mySql)){
             $result = $conn->query($mySql);
+            }
           }
-
-          //put this in a function and make it return
 
           function profileDataChangeQuery($firstname,$lastname,$specialty,$biography){
             $n = 0;
@@ -195,7 +191,7 @@ $appointments_result = $prepared->get_result();
             }
 
             if($n!=0){
-              $query = $query . " WHERE id=1";
+              $query = $query . " WHERE id = " .$_SESSION['id'];
               return $query;
             }
             else {
