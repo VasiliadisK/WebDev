@@ -253,49 +253,15 @@ $lastname = $row['lastname'];
                     <?php echo $data['phone_number'] ?>
                   </p>
                   <p class="card-text">
-                    <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal"
-                      data-target="#create">Create Appointment</button>
-                  <div id="create" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                      <!-- Modal content-->
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title">Create Appointment</h4>
-                        </div>
-                        <div class="modal-body">
-                          <p>Fill the form to create your appointment</p>
-                          <form action="" method="post">
-                            <label for="location">Location:</label>
-                            <input type="text" id="location" name="location"><br>
-                            <label for="datetime">Date and Time:</label>
-                            <input type="text" id="datetime" name="datetime"><br>
-                            <label for="description">Description:</label>
-                            <input type="text" id="description" name="description"><br>
-                            <input type="submit" name="create" value="Create">
-                          </form>
-                          <?php
-                          if (isset($_POST['create'])) {
-                            $patient_id = $_SESSION['id'];
-                            $doctor_id = $data['id'];
-                            $location = $_POST['location'];
-                            $datetime = $_POST['datetime'];
-                            $description = $_POST['description'];
-                            $query = "INSERT INTO appointments (patient_id,doctor_id,location,datetime,description) VALUES ('$patient_id','$doctor_id','$location','$datetime','$description')";
-                            
-                            if ($conn->query($query)) {
-                              echo "Success";
-                              }else{
-                              echo $conn->error;
-                              }
-                          }
-                          ?>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <button type="button" id="make" class="btn btn-primary btn-lg btn-block" data-toggle="modal"
+                      data-target="#create" onclick="createAppointment('<?php echo $data['id'] ?>')">Create
+                      Appointment</button>
+                    <script type="text/javascript">
+                      function createAppointment(id) {
+                        var doctor_id = document.getElementById("doctor_id");
+                        doctor_id.value = id;
+                      }
+                    </script>
                   </p>
                   </p>
                   </p>
@@ -311,6 +277,43 @@ $lastname = $row['lastname'];
           <h2 class="text-center">There are no available doctors at this time</h2>
           </p>
         <?php } ?>
+      </div>
+    </div>
+    <div id="create" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Create Appointment</h4>
+          </div>
+          <div class="modal-body">
+            <p>Fill the form to create your appointment</p>
+            <form onsubmit="return true" method="post">
+              <label for="location">Location:</label>
+              <input type="text" id="location_create" name="location_create"><br>
+              <label for="datetime">Date and Time:</label>
+              <input type="text" id="datetime_create" name="datetime_create"><br>
+              <label for="description">Description:</label>
+              <input type="text" id="description_create" name="description_create"><br>
+              <input type="hidden" id="doctor_id" name="doctor_id">
+              <input type="submit" onclick="" name="create_btn" value="Create">
+            </form>
+            <?php
+            if (isset($_POST['create_btn'])) {
+              $patient_id = $_SESSION['id'];
+              $doctor_id = $_REQUEST['doctor_id'];
+              $location = $_REQUEST['location_create'];
+              $datetime = $_REQUEST['datetime_create'];
+              $description = $_REQUEST['description_create'];
+              $sql = "INSERT INTO appointments (patient_id,doctor_id,location,datetime,description) VALUES ('$patient_id','$doctor_id','$location','$datetime','$description')";
+              mysqli_query($conn, $sql);
+            }
+            ?>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -344,56 +347,26 @@ $lastname = $row['lastname'];
                   <p class="card-text">
                     <?php echo $data['datetime']; ?>
                   </p>
-                  <p id="description" class="card-text">
-                    <div class="description">
-                      <?php echo $data['description'] ?>
-                    </div>
+                  <p class="card-text">
+                    <?php echo $data['description'] ?>
                   </p>
                   <p class="card-text">
-                    <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal"
-                      data-target="#edit">Edit Appointment</button>
-                  <div id="edit" class="modal fade" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                      <!-- Modal content-->
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h4 class="modal-title">Edit Appointment</h4>
-                        </div>
-                        <div class="modal-body">
-                          <p>Edit your appointment</p>
-                          <form>
-                            <label for="location">Location:</label>
-                            <input type="text" id="location" name="location" value="<?php echo $data['location']; ?>"><br>
-                            <label for="datetime">Date and Time:</label>
-                            <input type="text" id="datetime" name="datetime" value="<?php echo $data['datetime']; ?>"><br>
-                            <label for="description">Description:</label>
-                            <input type="text" id="description" name="description"
-                              value="<?php echo $data['description']; ?>"><br>
-                            <input type="submit" name="update" value="Update">
-                            <input type="submit" name="delete" value="Delete">
-                          </form>
-                          <?php
-                          if (isset($_POST['update'])) {
-                            $location = $data['location'];
-                            $datetime = $data['datetime'];
-                            $description = $data['description'];
-                            $id = $data['id'];
-                            $query = "UPDATE appointments SET location='$location',datetime='$datetime',description='$description' WHERE id='$id'";
-
-                            if ($conn->query($query)) {
-                              echo "Success";
-                              }else{
-                              echo $conn->error;
-                              }
-                          }
-                          ?>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    <button type="button" id="edit_btn" class="btn btn-primary btn-lg btn-block" data-toggle="modal"
+                      data-target="#edit"
+                      onclick="editAppointment('<?php echo $data['id'] ?>','<?php echo $data['location'] ?>','<?php echo $data['datetime'] ?>','<?php echo $data['description'] ?>')">Edit
+                      Appointment</button>
+                    <script type="text/javascript">
+                      function editAppointment(id, location, datetime, description) {
+                        var location_input = document.getElementById("location_update");
+                        location_input.value = location;
+                        var datetime_input = document.getElementById("datetime_update");
+                        datetime_input.value = datetime;
+                        var description_input = document.getElementById("description_update");
+                        description_input.value = description;
+                        var appointment_id = document.getElementById("appointment_id");
+                        appointment_id.value = id;
+                      }
+                    </script>
                   </p>
                   </p>
                 </div>
@@ -410,7 +383,54 @@ $lastname = $row['lastname'];
         <?php } ?>
       </div>
     </div>
+    <div id="edit" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Edit Appointment</h4>
+          </div>
+          <div class="modal-body">
+            <p>Edit your appointment</p>
+            <form method="post">
+              <label for="location">Location:</label>
+              <input type="text" id="location_update" name="location_update"><br>
+              <label for="datetime">Date and Time:</label>
+              <input type="text" id="datetime_update" name="datetime_update"><br>
+              <label for="description">Description:</label>
+              <input type="text" id="description_update" name="description_update"><br>
+              <input type="hidden" id="appointment_id" name="appointment_id">
+              <input type="submit" name="update_btn" value="Update">
+              <input type="submit" name="delete_btn" value="Delete">
+            </form>
+            <?php
+            if (isset($_POST['update_btn'])) {
+              $location = $_REQUEST['location_update'];
+              $datetime = $_REQUEST['datetime_update'];
+              $description = $_REQUEST['description_update'];
+              $appointment_id = $_REQUEST['appointment_id'];
+              $sql = "UPDATE appointments SET location='$location',datetime='$datetime',description='$description' WHERE id='$appointment_id'";
+              mysqli_query($conn, $sql);
+            }
+
+            if (isset($_POST['delete_btn'])) {
+              $appointment_id = $_REQUEST['appointment_id'];
+              $sql = "DELETE FROM appointments WHERE id='$appointment_id'";
+              mysqli_query($conn, $sql);
+            }
+            ?>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </section>
+
+
+
   <!-- End of my appointments section-->
 
   <!-- ======= Contact Section ======= -->
