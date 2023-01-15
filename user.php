@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['loggedin'])) {
+if(!isset($_SESSION['loggedin']) || $_SESSION['is_doctor'] === TRUE) {
   header("Location:index.php");
 }
 include('db.php');
@@ -86,8 +86,10 @@ $lastname = $row['lastname'];
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
           <li><div class="container">
           <form action="#">
-            <input class="form-control" id="search" type="text" placeholder="Search for our doctors">
-            <button style="display:none;" type="submit">Submit</button>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
           </form>
           </div></li>
         </ul>
@@ -101,7 +103,32 @@ $lastname = $row['lastname'];
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
 
-  <!-- Modal for gear (options)-->
+<!-- Modal for Doctor Search-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Search Doctors Based on: </h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  <!-- Modal for gear (options) // profile Setinngs Change -->
   <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
