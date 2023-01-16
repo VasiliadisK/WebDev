@@ -88,7 +88,7 @@ $lastname = $row['lastname'];
           <form action="#">
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
+  Search Doctors
 </button>
           </form>
           </div></li>
@@ -113,16 +113,37 @@ $lastname = $row['lastname'];
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+
+
+
       <div class="modal-body">
-        ...
+       <form action = "user.php" method = "POST" class ="modal-form">
+       <label for="chooseLocation">Location</label>
+       <select class="form-select" aria-label="Default select example" style ="margin-bottom:30px; margin-top:0px;">
+  <option selected id ="chooseLocation">Open this select menu</option>
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+</select>
+       <label for="chooseSpecialty">Specialty</label>
+       <select class="form-select" aria-label="Default select example">
+  <option selected id ="chooseSpecialty">Open this select menu</option>
+  <option value="1">One</option>
+  <option value="2">Two</option>
+  <option value="3">Three</option>
+</select>
       </div>
+
+
+
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Search</button>
       </div>
     </div>
   </div>
 </div>
+</form>
 
 
 
