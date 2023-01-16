@@ -232,7 +232,7 @@ $lastname = $row['lastname'];
         <div class="icon-boxes d-flex flex-column align-items-stretch justify-content-center py-5 px-lg-5">
           <h3>Look up any doctor using a name, specialty or even a location</h3>
 
-          <div class="icon-box">
+          <div class="icon-box" data-bs-toggle="modal" data-bs-target="#exampleModal">
             <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
             <h4 class="title"><a href="#search">Search for our doctors</a></h4>
             <p class="description">Feel free to use the search bar to look up any of our doctors using filters like name, specialty or location !</p>
