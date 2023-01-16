@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['loggedin'])) {
+if(!isset($_SESSION['loggedin']) || $_SESSION['is_doctor'] === FALSE) {
   header("Location:index.php");
 }
 include('db.php');

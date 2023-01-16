@@ -1,6 +1,6 @@
 <?php
 session_start();
-if(!isset($_SESSION['loggedin'])) {
+if(!isset($_SESSION['loggedin']) || $_SESSION['is_doctor'] === TRUE) {
   header("Location:index.php");
 }
 include('db.php');
@@ -86,8 +86,10 @@ $lastname = $row['lastname'];
           <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
           <li><div class="container">
           <form action="#">
-            <input class="form-control" id="search" type="text" placeholder="Search for our doctors">
-            <button style="display:none;" type="submit">Submit</button>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Search Doctors
+</button>
           </form>
           </div></li>
         </ul>
@@ -101,7 +103,78 @@ $lastname = $row['lastname'];
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
 
-  <!-- Modal for gear (options)-->
+<?php
+?>
+<!-- Modal for Doctor Search-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Search Doctors Based on: </h5>
+        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+
+
+      <div class="modal-body">
+       <form action = "user.php" method = "POST" class ="modal-form">
+       <label for="chooseLocation">Location</label>
+       <select class="form-select" aria-label="Default select example" style ="margin-bottom:30px; margin-top:0px;">
+  <option selected id ="chooseLocation" name ="selectedLocation">Choose Location</option>
+  <?php
+  $query = "SELECT locations, specialty FROM doctors";
+  $searchPrepared = $conn->prepare($query);
+  $searchPrepared->execute();
+  $locations_specialties = $searchPrepared->get_result();
+  $locations = array();
+  $specialties = array();
+   if($locations_specialties->num_rows > 0){
+    while($x = $locations_specialties->fetch_assoc()){
+      $new_location = $x['locations'];
+      if (!in_array($new_location, $locations)) {
+        array_push($locations, $new_location);
+    }
+    $new_specialty = $x['specialty'];
+    if (!in_array($new_specialty, $specialties)) {
+      array_push($specialties, $new_specialty);
+  }
+    }
+  }
+  for($i =0; $i < count($locations); $i++){
+  echo "<option value=", $locations[$i], ">", $locations[$i], "</option>";
+  }
+   ?>
+</select>
+       <label for="chooseSpecialty">Specialty</label>
+       <select class="form-select" aria-label="Default select example">
+  <option selected id ="chooseSpecialty" name ="selectedSpecialty">Choose Specialty</option>
+  <?php
+   for($i =0; $i < count($specialties); $i++){
+    echo "<option value=", $specialties[$i], ">", $specialties[$i], "</option>";
+    }
+    ?>
+</select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+
+<?php
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+$searchedDoctors = "SELECT id FROM doctors WHERE locations ='". $_POST['selectedLocation'] . "'" . "AND specialty= '". $_POST['specialty']."'";
+}
+?>
+
+
+
+  <!-- Modal for gear (options) // profile Setinngs Change -->
   <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -129,8 +202,10 @@ $lastname = $row['lastname'];
       </div>
     </div>
   </div>
+
   <?php
-   if($_SERVER["REQUEST_METHOD"] == "POST"){
+  //gia na brw pia forma ekane submit o xristis na ginete to isset sto value tou submit tis kathe formas kai meta sto telos pou trexei o kwdikas mporoume na tou dinoume pali ti timi null
+   if($_SERVER["REQUEST_METHOD"] === "POST"){
    $firstname = $_POST['firstname'];
    $lastname = $_POST['lastname'];
    $mySql = profileDataChangeQuery($firstname,$lastname);
@@ -184,7 +259,7 @@ $lastname = $row['lastname'];
         <div class="icon-boxes d-flex flex-column align-items-stretch justify-content-center py-5 px-lg-5">
           <h3>Look up any doctor using a name, specialty or even a location</h3>
 
-          <div class="icon-box">
+          <div class="icon-box" data-bs-toggle="modal" data-bs-target="#exampleModal">
             <div class="icon"><i class="fa-solid fa-magnifying-glass"></i></div>
             <h4 class="title"><a href="#search">Search for our doctors</a></h4>
             <p class="description">Feel free to use the search bar to look up any of our doctors using filters like name, specialty or location !</p>
