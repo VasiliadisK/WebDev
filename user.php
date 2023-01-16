@@ -103,6 +103,8 @@ $lastname = $row['lastname'];
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
 
+<?php
+?>
 <!-- Modal for Doctor Search-->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -120,24 +122,43 @@ $lastname = $row['lastname'];
        <form action = "user.php" method = "POST" class ="modal-form">
        <label for="chooseLocation">Location</label>
        <select class="form-select" aria-label="Default select example" style ="margin-bottom:30px; margin-top:0px;">
-  <option selected id ="chooseLocation">Open this select menu</option>
-  <option value="1">One</option>
-  <option value="2">Two</option>
-  <option value="3">Three</option>
+  <option selected id ="chooseLocation" name ="selectedLocation">Choose Location</option>
+  <?php
+  $query = "SELECT locations, specialty FROM doctors";
+  $searchPrepared = $conn->prepare($query);
+  $searchPrepared->execute();
+  $locations_specialties = $searchPrepared->get_result();
+  $locations = array();
+  $specialties = array();
+   if($locations_specialties->num_rows > 0){
+    while($x = $locations_specialties->fetch_assoc()){
+      $new_location = $x['locations'];
+      if (!in_array($new_location, $locations)) {
+        array_push($locations, $new_location);
+    }
+    $new_specialty = $x['specialty'];
+    if (!in_array($new_specialty, $specialties)) {
+      array_push($specialties, $new_specialty);
+  }
+    }
+  }
+  for($i =0; $i < count($locations); $i++){
+  echo "<option value=", $locations[$i], ">", $locations[$i], "</option>";
+  }
+   ?>
 </select>
        <label for="chooseSpecialty">Specialty</label>
        <select class="form-select" aria-label="Default select example">
-  <option selected id ="chooseSpecialty">Open this select menu</option>
-  <option value="1">One</option>
-  <option value="2">Two</option>
-  <option value="3">Three</option>
+  <option selected id ="chooseSpecialty" name ="selectedSpecialty">Choose Specialty</option>
+  <?php
+   for($i =0; $i < count($specialties); $i++){
+    echo "<option value=", $specialties[$i], ">", $specialties[$i], "</option>";
+    }
+    ?>
 </select>
       </div>
-
-
-
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         <button type="submit" class="btn btn-primary">Search</button>
       </div>
     </div>
@@ -145,7 +166,11 @@ $lastname = $row['lastname'];
 </div>
 </form>
 
-
+<?php
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+$searchedDoctors = "SELECT id FROM doctors WHERE locations ='". $_POST['selectedLocation'] . "'" . "AND specialty= '". $_POST['specialty']."'";
+}
+?>
 
 
 
@@ -177,8 +202,10 @@ $lastname = $row['lastname'];
       </div>
     </div>
   </div>
+
   <?php
-   if($_SERVER["REQUEST_METHOD"] == "POST"){
+  //gia na brw pia forma ekane submit o xristis na ginete to isset sto value tou submit tis kathe formas kai meta sto telos pou trexei o kwdikas mporoume na tou dinoume pali ti timi null
+   if($_SERVER["REQUEST_METHOD"] === "POST"){
    $firstname = $_POST['firstname'];
    $lastname = $_POST['lastname'];
    $mySql = profileDataChangeQuery($firstname,$lastname);
