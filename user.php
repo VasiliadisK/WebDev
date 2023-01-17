@@ -12,7 +12,7 @@ $prepared = $conn->prepare($query);
 $prepared->execute();
 $appointments_result = $prepared->get_result();
 
-$query = "SELECT doctors.firstname, doctors.lastname, doctors.specialty, doctors.image, doctors.email, doctors.phone_number FROM doctors";
+$query = "SELECT doctors.id, doctors.firstname, doctors.lastname, doctors.specialty, doctors.image, doctors.email, doctors.phone_number FROM doctors";
 $prepared = $conn->prepare($query);
 $prepared->execute();
 $doctors_result = $prepared->get_result();
@@ -48,6 +48,12 @@ $lastname = $row['lastname'];
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+
+  <!-- JQuery -->
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
 </head>
 
@@ -94,9 +100,8 @@ $lastname = $row['lastname'];
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
       <a class="appointment-btn d-none d-md-inline mx-2" href="logout.php">Logout</a>
-      <a href="#profilesettings" class="profilesettings-btn scrollto" data-bs-toggle="modal" data-bs-target="#modal"><span class="d-none d-md-inline" ><div class="icon"><i class="fa-solid fa-gear"></i></div></span></a>
+      <a href="#profilesettings" class="profilesettings-btn scrollto" data-bs-toggle="modal" data-bs-target="#modalGear"><span class="d-none d-md-inline" ><div class="icon"><i class="fa-solid fa-gear"></i></div></span></a>
     </div>
-    <div id="message"></div>
   </header><!-- End Header -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 
@@ -115,11 +120,11 @@ $lastname = $row['lastname'];
           <form action = "user.php" method = "POST" class="modal-form">
             <div class="firstname-block modcont">
               <label for="firstname">First Name</label>
-              <input type="input" class="firstname" id="firstname" name="firstname" placeholder = "<?php echo $firstname ?>">
+              <input type="input" class="firstname" id="firstname" name="firstname" placeholder = "<?php echo $firstname ?>" required>
             </div>
             <div class="lastname-block modcont">
               <label for="lastname">Last Name</label>
-              <input type="input" class="lastname" id="lastname" name ="lastname" placeholder = "<?php echo $lastname ?>">
+              <input type="input" class="lastname" id="lastname" name ="lastname" placeholder = "<?php echo $lastname ?>" required>
             </div>
         </div>
         <div class="modal-footer">
@@ -180,7 +185,6 @@ $lastname = $row['lastname'];
 
  <section id="home" class="about mt-5">
     <div class="container-fluid">
-
         <div class="icon-boxes d-flex flex-column align-items-stretch justify-content-center py-5 px-lg-5">
           <h3>Look up any doctor using a name, specialty or even a location</h3>
 
@@ -226,20 +230,22 @@ $lastname = $row['lastname'];
                     alt="Palm Springs Road" />
                   <div class="card-body">
                     <h5 class="card-title">
-                      <?php echo $data['firstname'], " ", $data['lastname'] ?> 
+                      <?php echo $data['firstname'], " ", $data['lastname']; ?> 
                     </h5>
                     <p class="card-text">
                       <p class="card-text">
-                          <?php echo $data['specialty'] ?>
+                          <?php echo $data['specialty']; ?>
                         </p>
                         <p class="card-text">
-                          <?php echo $data['email'] ?>
-                        </p><p class="card-text">
-                          <?php echo $data['phone_number'] ?>
-                        </p><p class="card-text">
-                          <button type="button" class="btn btn-primary btn-lg btn-block">Make appointment</button>                        </p>
-
+                          <?php echo $data['email']; ?>
                         </p>
+                        <p class="card-text">
+                          <?php echo $data['phone_number']; ?>
+                        </p>
+                        <p class="card-text">
+                          <button type="button" id="makeAppointmentButton<?php echo $data['id']; ?>" class="btn btn-primary btn-lg btn-block makeAppointmentButton" data-bs-toggle="modal" data-bs-target="#makeAppointment">Make appointment</button>
+                        </p>
+                      </p>
                     </p>
                   </div>
                 </div>
@@ -257,6 +263,40 @@ $lastname = $row['lastname'];
           </section>
    
    <!-- End of doctors sections -->
+
+
+   <!-- Modal -->
+   <div class="modal fade" id="makeAppointment" tabindex="-1" role="dialog" aria-labelledby="makeAppointmentModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="makeAppointmentModalLabel">Appointment's date and time</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          <form id="makeAppointmentForm" method="POST">
+            <div class="form-group">
+              <label for="datetime">Date and Time</label>
+              <input class="form-control mb-4" id="appointmentDatetime" type="datetime-local" name="datetime" value="<?php echo date("Y-m-d\TH:i"); ?>" required>
+              <label for="description">Description</label>
+              <textarea class="form-control" id="appointmentDescription" name="description" rows="5" cols="20" maxlength="50"></textarea>
+              <span class="error" id="appointmentDescription_err"></span>
+              <input type="hidden" name="id" id="appointmentDoctorId" value="" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" id="makeAppointmentSubmit" name="makeAppointmentSubmit" class="btn btn-primary makeAppointmentSubmit">Make Appointment</button>
+          </div>
+          </form>
+          <div id="message"></div>
+        </div>
+      </div>
+    </div>
+
+
     <!-- My appointments section -->
 
 
@@ -286,6 +326,9 @@ $lastname = $row['lastname'];
                   </p>
                   <p class="card-text">
                     <?php echo $data['description'] ?>
+                  </p>
+                  <p class="card-text">
+                    <?php echo $data['location'] ?>
                   </p>
                   <p class="card-text">
                     <button type="button" class="btn btn-primary btn-lg btn-block">Edit Appointment</button>
@@ -370,10 +413,11 @@ $lastname = $row['lastname'];
   <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
   <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
   <script src="assets/vendor/php-email-form/validate.js"></script>
+  
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-  
+  <script src="assets/js/appointment.js"></script>
 
 </body>
 
