@@ -121,8 +121,9 @@ $lastname = $row['lastname'];
       <div class="modal-body">
        <form action = "user.php" method = "POST" class ="modal-form">
        <label for="chooseLocation">Location</label>
-       <select class="form-select" aria-label="Default select example" style ="margin-bottom:30px; margin-top:0px;">
-  <option selected id ="chooseLocation" name ="selectedLocation">Choose Location</option>
+       <input type="hidden" name="form_name" value="searchForm">
+       <select class="form-select" aria-label="Default select example" style ="margin-bottom:30px; margin-top:0px;" name="selectedLocation">
+  <option selected id ="chooseLocation" name ="sele">Choose Location</option>
   <?php
   $query = "SELECT locations, specialty FROM doctors";
   $searchPrepared = $conn->prepare($query);
@@ -148,8 +149,8 @@ $lastname = $row['lastname'];
    ?>
 </select>
        <label for="chooseSpecialty">Specialty</label>
-       <select class="form-select" aria-label="Default select example">
-  <option selected id ="chooseSpecialty" name ="selectedSpecialty">Choose Specialty</option>
+       <select class="form-select" aria-label="Default select example" name ="selectedSpecialty">
+  <option selected id ="chooseSpecialty">Choose Specialty</option>
   <?php
    for($i =0; $i < count($specialties); $i++){
     echo "<option value=", $specialties[$i], ">", $specialties[$i], "</option>";
@@ -159,7 +160,7 @@ $lastname = $row['lastname'];
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="submit" class="btn btn-primary" name="searchSubmit">Search</button>
       </div>
     </div>
   </div>
@@ -167,8 +168,11 @@ $lastname = $row['lastname'];
 </form>
 
 <?php
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-$searchedDoctors = "SELECT id FROM doctors WHERE locations ='". $_POST['selectedLocation'] . "'" . "AND specialty= '". $_POST['specialty']."'";
+if($_SERVER["REQUEST_METHOD"] === "POST" && $_POST['form_name']=='searchForm'){
+$query = "SELECT firstname, lastname, specialty, image, email, phone_number FROM doctors WHERE locations ='". $_POST['selectedLocation'] . "'" . " AND specialty= '". $_POST['selectedSpecialty']."'";
+$prepared = $conn->prepare($query);
+$prepared->execute();
+$searchedDoctors = $prepared->get_result();
 }
 ?>
 
@@ -186,6 +190,7 @@ $searchedDoctors = "SELECT id FROM doctors WHERE locations ='". $_POST['selected
 
         <div class="modal-body" >
           <form action = "user.php" method = "POST" class="modal-form">
+          <input type="hidden" name="form_name" value="editForm">
             <div class="firstname-block modcont">
               <label for="firstname">First Name</label>
               <input type="input" class="firstname" id="firstname" name="firstname" placeholder = "<?php echo $firstname ?>">
@@ -205,7 +210,7 @@ $searchedDoctors = "SELECT id FROM doctors WHERE locations ='". $_POST['selected
 
   <?php
   //gia na brw pia forma ekane submit o xristis na ginete to isset sto value tou submit tis kathe formas kai meta sto telos pou trexei o kwdikas mporoume na tou dinoume pali ti timi null
-   if($_SERVER["REQUEST_METHOD"] === "POST"){
+   if($_SERVER["REQUEST_METHOD"] === "POST" && $_POST['form_name'] == 'editForm'){
    $firstname = $_POST['firstname'];
    $lastname = $_POST['lastname'];
    $mySql = profileDataChangeQuery($firstname,$lastname);
@@ -291,9 +296,15 @@ $searchedDoctors = "SELECT id FROM doctors WHERE locations ='". $_POST['selected
         <h1 class="text-center">Our doctors</h1>
         <div class="row row-cols-1 row-cols-md-3 g-4 mt-5">
         <?php
-          if ($doctors_result->num_rows > 0) {
+        if($_SERVER["REQUEST_METHOD"] === "POST" && $_POST['form_name']=='searchForm'){
+            $shownDoctors = $searchedDoctors;
+        }
+        else{
+          $shownDoctors = $doctors_result;
+        }
+          if ($shownDoctors->num_rows > 0) {
             $sn=1;
-            while($data = $doctors_result->fetch_assoc()) {
+            while($data = $shownDoctors->fetch_assoc()) {
         ?>
             <div class="col">
                 <div class="card">
