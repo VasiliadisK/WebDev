@@ -2,6 +2,8 @@
 // δηλαδή με δύο κουμπιά και δύο φορές έλεγχο μία για login και μία για register
 
 $(document).ready(function () {
+
+    console.log("ok");
     $('#username').on('input', function () {
         checkuser();
     });
@@ -23,9 +25,9 @@ $(document).ready(function () {
 
         if (!checkuser() && !checkemail() && !checkpass() && !checkcpass()) {
             console.log("er1");
-            $("#message").html(`<div class="alert alert-warning">Please fill all required field</div>`);
+            $("#message").html(`<div class="alert alert-warning">Please fill all the required fields</div>`);
         } else if (!checkuser() || !checkemail() || !checkpass() || !checkcpass()) {
-            $("#message").html(`<div class="alert alert-warning">Please fill all required field</div>`);
+            $("#message").html(`<div class="alert alert-warning">Please fill all the required fields</div>`);
             console.log("er");
         }
         else {
