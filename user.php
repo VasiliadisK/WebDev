@@ -130,7 +130,7 @@ $lastname = $row['lastname'];
        <select class="form-select" aria-label="Default select example" style ="margin-bottom:30px; margin-top:0px;" name="selectedLocation">
   <option selected id ="chooseLocation" name ="sele">Choose Location</option>
   <?php
-  $query = "SELECT locations, specialty FROM doctors";
+  $query = "SELECT location, specialty FROM doctors";
   $searchPrepared = $conn->prepare($query);
   $searchPrepared->execute();
   $locations_specialties = $searchPrepared->get_result();
@@ -138,7 +138,7 @@ $lastname = $row['lastname'];
   $specialties = array();
    if($locations_specialties->num_rows > 0){
     while($x = $locations_specialties->fetch_assoc()){
-      $new_location = $x['locations'];
+      $new_location = $x['location'];
       if (!in_array($new_location, $locations)) {
         array_push($locations, $new_location);
     }
@@ -174,7 +174,7 @@ $lastname = $row['lastname'];
 
 <?php
 if($_SERVER["REQUEST_METHOD"] === "POST" && $_POST['form_name']=='searchForm'){
-$query = "SELECT firstname, lastname, specialty, image, email, phone_number FROM doctors WHERE locations ='". $_POST['selectedLocation'] . "'" . " AND specialty= '". $_POST['selectedSpecialty']."'";
+$query = "SELECT id, firstname, lastname, specialty, image, email, phone_number FROM doctors WHERE location ='". $_POST['selectedLocation'] . "'" . " AND specialty= '". $_POST['selectedSpecialty']."'";
 $prepared = $conn->prepare($query);
 $prepared->execute();
 $searchedDoctors = $prepared->get_result();
