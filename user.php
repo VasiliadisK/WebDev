@@ -7,10 +7,11 @@ include('db.php');
 # Το query τραβάει τα απαραίτητα δεδομένα για το view για τον χρήστη 'kostas'.
 # Να αλλάξω where clause (Όταν μπουν τα sessions).
 
-$query = "SELECT doctors.firstname, doctors.lastname, doctors.specialty, doctors.image, appointments.location, DATE_FORMAT(appointments.datetime, '%W %m/%d/%Y at %H:%i') AS datetime, appointments.description FROM appointments INNER JOIN patients ON appointments.patient_id = patients.id INNER JOIN doctors ON appointments.doctor_id = doctors.id WHERE patients.username = '".$_SESSION['name']."'";
+$query = "SELECT doctors.firstname, doctors.lastname, doctors.specialty, doctors.image, appointments.id, appointments.location, DATE_FORMAT(appointments.datetime, '%W %m/%d/%Y at %H:%i') AS datetime, appointments.description FROM appointments INNER JOIN patients ON appointments.patient_id = patients.id INNER JOIN doctors ON appointments.doctor_id = doctors.id WHERE patients.username = '".$_SESSION['name']."'";
 $prepared = $conn->prepare($query);
 $prepared->execute();
 $appointments_result = $prepared->get_result();
+
 
 $query = "SELECT doctors.id, doctors.firstname, doctors.lastname, doctors.specialty, doctors.image, doctors.email, doctors.phone_number FROM doctors";
 $prepared = $conn->prepare($query);
@@ -417,7 +418,7 @@ $searchedDoctors = $prepared->get_result();
                     <?php echo $data['location'] ?>
                   </p>
                   <p class="card-text">
-                    <button type="button" class="btn btn-primary btn-lg btn-block">Edit Appointment</button>
+                    <button type="button" id="<?php echo $data['id'] ?>" class="btn btn-primary btn-lg btn-block editAppointmentButton" data-bs-toggle="modal" data-bs-target="#editAppointment">Edit Appointment</button>
                   </p>
                 </p>
             </div>
@@ -433,6 +434,37 @@ $searchedDoctors = $prepared->get_result();
           </div>
       </div>
     </section>
+
+    <!-- Modal -->
+   <div class="modal fade" id="editAppointment" tabindex="-1" role="dialog" aria-labelledby="editAppointmentModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editAppointmentModalLabel">Appointment's date and time</h5>
+            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          <form id="editAppointmentForm" method="POST">
+            <div class="form-group">
+              <label for="datetime">Date and Time</label>
+              <input class="form-control mb-4" id="appointmentDatetime" type="datetime-local" name="datetime" value="<?php echo date("Y-m-d\TH:i"); ?>" required>
+              <label for="description">Description</label>
+              <textarea class="form-control" id="editAppointmentDescription" name="description" rows="5" cols="20" maxlength="50"></textarea>
+              <span class="error" id="editAppointmentDescription_err"></span>
+              <input type="hidden" name="id" id="editAppointmentId" value="" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" id="editAppointmentSubmit" name="editAppointmentSubmit" class="btn btn-primary">Edit Appointment</button>
+          </div>
+          </form>
+          <div id="message"></div>
+        </div>
+      </div>
+    </div>
     <!-- End of my appointments section-->
     
     <!-- ======= Contact Section ======= -->
