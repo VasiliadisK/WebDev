@@ -184,7 +184,7 @@ $searchedDoctors = $prepared->get_result();
 
 
   <!-- Modal for gear (options) // profile Setinngs Change -->
-  <div class="modal fade" id="modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+  <div class="modal fade" id="modalGear" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
